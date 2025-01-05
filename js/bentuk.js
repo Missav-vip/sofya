@@ -1,5 +1,5 @@
-import kueData from ".k.json";
-import plastikData from ".P.json";
+import kueData from "/css/k.json";
+import plastikData from "/css/P.json";
 
 let localKueData = kueData; // Data Kue
 let localPlastikData = plastikData; // Data Plastik
