@@ -1,0 +1,94 @@
+{
+  "Plastik": [
+    {
+      "group": "Plastik PP",
+      "items": [
+        {
+          "no": 1,
+          "ukuran": "50x40x30 cm",
+          "kode_gudang": "KD007",
+          "kode_toko": "KD-TK007",
+          "harga_dus": 600000,
+          "harga_1_pak": 100000,
+          "harga_1_pis": 50000,
+          "harga_1_ons": 25000,
+          "harga_1000_gram": 120000,
+          "harga_500_gram": 60000,
+          "harga_250_gram": 30000,
+          "stok_gudang": 70,
+          "stok_toko": 35,
+          "masuk": "1/12/2025",
+          "keluar": "2/12/2025"
+        },
+        {
+          "no": 2,
+          "ukuran": "40x30x20 cm",
+          "kode_gudang": "KD008",
+          "kode_toko": "KD-TK008",
+          "harga_dus": 580000,
+          "harga_1_pak": 95000,
+          "harga_1_pis": 48000,
+          "harga_1_ons": 24000,
+          "harga_1000_gram": 115000,
+          "harga_500_gram": 57000,
+          "harga_250_gram": 29000,
+          "stok_gudang": 80,
+          "stok_toko": 45,
+          "masuk": "3/12/2025",
+          "keluar": "4/12/2025"
+        },
+        {
+          "no": 3,
+          "ukuran": "60x50x40 cm",
+          "kode_gudang": "KD009",
+          "kode_toko": "KD-TK009",
+          "harga_dus": 650000,
+          "harga_1_pak": 110000,
+          "harga_1_pis": 55000,
+          "harga_1_ons": 27500,
+          "harga_1000_gram": 130000,
+          "harga_500_gram": 65000,
+          "harga_250_gram": 32500,
+          "stok_gudang": 85,
+          "stok_toko": 50,
+          "masuk": "5/12/2025",
+          "keluar": "6/12/2025"
+        },
+        {
+          "no": 4,
+          "ukuran": "30x20x10 cm",
+          "kode_gudang": "KD010",
+          "kode_toko": "KD-TK010",
+          "harga_dus": 570000,
+          "harga_1_pak": 90000,
+          "harga_1_pis": 45000,
+          "harga_1_ons": 22500,
+          "harga_1000_gram": 110000,
+          "harga_500_gram": 55000,
+          "harga_250_gram": 27500,
+          "stok_gudang": 90,
+          "stok_toko": 55,
+          "masuk": "7/12/2025",
+          "keluar": "8/12/2025"
+        },
+        {
+          "no": 5,
+          "ukuran": "70x60x50 cm",
+          "kode_gudang": "KD011",
+          "kode_toko": "KD-TK011",
+          "harga_dus": 700000,
+          "harga_1_pak": 120000,
+          "harga_1_pis": 60000,
+          "harga_1_ons": 30000,
+          "harga_1000_gram": 140000,
+          "harga_500_gram": 70000,
+          "harga_250_gram": 35000,
+          "stok_gudang": 95,
+          "stok_toko": 60,
+          "masuk": "9/12/2025",
+          "keluar": "10/12/2025"
+        }
+      ]
+    }
+  ]
+}

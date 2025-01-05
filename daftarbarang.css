@@ -1,0 +1,105 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #e0e0e0;
+    margin: 2px;
+}
+h1, .search-container {
+    text-align: center;
+}
+.search-container input {
+    padding: 15px;
+    width: 90%;
+    border-radius: 30px;
+    border: none;
+    background: #e0e0e0;
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.7);
+    transition: box-shadow 0.3s ease-in-out;
+}
+.search-container input:focus {
+    box-shadow: inset 6px 6px 12px rgba(0, 0, 0, 0.3), inset -6px -6px 12px rgba(255, 255, 255, 0.5);
+}
+.table-container {
+    overflow-x: auto;
+    margin-bottom: 20px;
+    background: #f4f4f4;
+    border-radius: 10px;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 800px;
+    background-color: #fff;
+}
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+th {
+    background-color: #f2f2f2;
+}
+td[contenteditable="true"]:focus {
+    background-color: #e0e0ff;
+}
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.floating-menu {
+    position: fixed;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.floating-button {
+    position: absolute; 
+    width: 60px;
+    height: 60px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.7);
+    font-size: 60px;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    transform-origin: center;
+}
+.floating-button:active {
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.7);
+    transform: scale(0.95);
+}
+.floating-button.rotate {
+    animation: rotate 0.5s ease-in-out;
+}
+.soft-button {
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.7);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    display: none;
+    white-space: nowrap;
+    z-index: 999; 
+}
+.soft-button.visible {
+    display: block;
+}
+.soft-button:hover {
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.7);
+    transform: scale(0.95);
+}

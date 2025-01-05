@@ -1,0 +1,154 @@
+{
+  "Kue": [
+    {
+      "group": "Tepung",
+      "items": [
+        {
+          "no": 1,
+          "nama_barang": "Monitor",
+          "kode_gudang": "KD001",
+          "kode_toko": "KD-TK001",
+          "harga_dus": 500000,
+          "harga_1000_gram": 100000,
+          "harga_500_gram": 50000,
+          "harga_250_gram": 25000,
+          "stok_gudang": 50,
+          "stok_toko": 20,
+          "masuk": "1/12/2025",
+          "keluar": "2/12/2025"
+        },
+        {
+          "no": 2,
+          "nama_barang": "Tepung Terigu",
+          "kode_gudang": "KD002",
+          "kode_toko": "KD-TK002",
+          "harga_dus": 450000,
+          "harga_1000_gram": 90000,
+          "harga_500_gram": 45000,
+          "harga_250_gram": 22000,
+          "stok_gudang": 60,
+          "stok_toko": 25,
+          "masuk": "3/12/2025",
+          "keluar": "4/12/2025"
+        },
+        {
+          "no": 3,
+          "nama_barang": "Tepung Maizena",
+          "kode_gudang": "KD003",
+          "kode_toko": "KD-TK003",
+          "harga_dus": 550000,
+          "harga_1000_gram": 110000,
+          "harga_500_gram": 55000,
+          "harga_250_gram": 27000,
+          "stok_gudang": 55,
+          "stok_toko": 30,
+          "masuk": "5/12/2025",
+          "keluar": "6/12/2025"
+        },
+        {
+          "no": 4,
+          "nama_barang": "Tepung Beras",
+          "kode_gudang": "KD004",
+          "kode_toko": "KD-TK004",
+          "harga_dus": 470000,
+          "harga_1000_gram": 95000,
+          "harga_500_gram": 48000,
+          "harga_250_gram": 24000,
+          "stok_gudang": 65,
+          "stok_toko": 40,
+          "masuk": "7/12/2025",
+          "keluar": "8/12/2025"
+        },
+        {
+          "no": 5,
+          "nama_barang": "Tepung Sagu",
+          "kode_gudang": "KD005",
+          "kode_toko": "KD-TK005",
+          "harga_dus": 520000,
+          "harga_1000_gram": 105000,
+          "harga_500_gram": 52500,
+          "harga_250_gram": 26000,
+          "stok_gudang": 75,
+          "stok_toko": 50,
+          "masuk": "9/12/2025",
+          "keluar": "10/12/2025"
+        }
+      ]
+    },
+    {
+      "group": "Nutrijel",
+      "items": [
+        {
+          "no": 1,
+          "nama_barang": "Nutrijel Strawberry",
+          "kode_gudang": "KD007",
+          "kode_toko": "KD-TK007",
+          "harga_dus": 400000,
+          "harga_1000_gram": 80000,
+          "harga_500_gram": 40000,
+          "harga_250_gram": 20000,
+          "stok_gudang": 100,
+          "stok_toko": 50,
+          "masuk": "10/12/2025",
+          "keluar": "11/12/2025"
+        },
+        {
+          "no": 2,
+          "nama_barang": "Nutrijel Mango",
+          "kode_gudang": "KD008",
+          "kode_toko": "KD-TK008",
+          "harga_dus": 420000,
+          "harga_1000_gram": 85000,
+          "harga_500_gram": 42000,
+          "harga_250_gram": 21000,
+          "stok_gudang": 90,
+          "stok_toko": 45,
+          "masuk": "12/12/2025",
+          "keluar": "13/12/2025"
+        },
+        {
+          "no": 3,
+          "nama_barang": "Nutrijel Lychee",
+          "kode_gudang": "KD009",
+          "kode_toko": "KD-TK009",
+          "harga_dus": 450000,
+          "harga_1000_gram": 90000,
+          "harga_500_gram": 45000,
+          "harga_250_gram": 23000,
+          "stok_gudang": 110,
+          "stok_toko": 60,
+          "masuk": "14/12/2025",
+          "keluar": "15/12/2025"
+        },
+        {
+          "no": 4,
+          "nama_barang": "Nutrijel Melon",
+          "kode_gudang": "KD010",
+          "kode_toko": "KD-TK010",
+          "harga_dus": 460000,
+          "harga_1000_gram": 92000,
+          "harga_500_gram": 46000,
+          "harga_250_gram": 23000,
+          "stok_gudang": 95,
+          "stok_toko": 55,
+          "masuk": "16/12/2025",
+          "keluar": "17/12/2025"
+        },
+        {
+          "no": 5,
+          "nama_barang": "Nutrijel Orange",
+          "kode_gudang": "KD011",
+          "kode_toko": "KD-TK011",
+          "harga_dus": 480000,
+          "harga_1000_gram": 96000,
+          "harga_500_gram": 48000,
+          "harga_250_gram": 24000,
+          "stok_gudang": 120,
+          "stok_toko": 70,
+          "masuk": "18/12/2025",
+          "keluar": "19/12/2025"
+        }
+      ]
+    }
+  ]
+}
