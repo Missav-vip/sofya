@@ -1,4 +1,3 @@
-Apakah menggunakan Ngrok Bisa pas waktunya untuk pengeditan data saya di aktifkan dan waktu tidak di aktifkan harganya Yang gerah di edit sebelumnya di web apakah bisa
 let kueData;
 let plastikData;
 
@@ -89,6 +88,3 @@ function getFromLocalStorage(key) {
 function removeFromLocalStorage(key) {
     localStorage.removeItem(key);
 }
-
-
-Sturuktur Saya Jangan Di Ubah saya Mau Bentuk File Seoeeti Ini saja.tambahkan Yang lain
