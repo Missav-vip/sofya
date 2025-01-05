@@ -1,3 +1,4 @@
+Apakah menggunakan Ngrok Bisa pas waktunya untuk pengeditan data saya di aktifkan dan waktu tidak di aktifkan harganya Yang gerah di edit sebelumnya di web apakah bisa
 let kueData;
 let plastikData;
 
@@ -10,30 +11,8 @@ if (kueData && plastikData) {
     enableEditing();
 } else {
     async function fetchData() {
-        const useNgrok = true; // Ganti ke false jika ingin menggunakan jalur GitHub/Vercel
-        const ngrokUrl = "https://<your-ngrok-url>.ngrok.io"; // URL Ngrok Anda
-        const githubUrl = "https://raw.githubusercontent.com/<username>/<repository>/main"; // URL GitHub Anda
-        const vercelUrl = "https://<your-vercel-app>.vercel.app/api"; // URL Vercel Anda
-
-        let kueUrl, plastikUrl;
-
-        if (useNgrok) {
-            kueUrl = `${ngrokUrl}/k.json`;
-            plastikUrl = `${ngrokUrl}/p.json`;
-        } else {
-            kueUrl = `${vercelUrl}/k.json`;
-            plastikUrl = `${vercelUrl}/p.json`;
-        }
-
-        try {
-            kueData = await (await fetch(kueUrl)).json();
-            plastikData = await (await fetch(plastikUrl)).json();
-        } catch (error) {
-            console.error("Failed to fetch from Ngrok or Vercel. Falling back to GitHub:", error);
-            kueData = await (await fetch(`${githubUrl}/k.json`)).json();
-            plastikData = await (await fetch(`${githubUrl}/p.json`)).json();
-        }
-
+        kueData = await (await fetch('k.json')).json();
+        plastikData = await (await fetch('p.json')).json();
         generateItemRows(kueData.Kue, "kueBody");
         generateItemRows(plastikData.Plastik, "plastikBody");
         enableEditing();
@@ -110,3 +89,6 @@ function getFromLocalStorage(key) {
 function removeFromLocalStorage(key) {
     localStorage.removeItem(key);
 }
+
+
+Sturuktur Saya Jangan Di Ubah saya Mau Bentuk File Seoeeti Ini saja.tambahkan Yang lain
