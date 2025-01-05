@@ -1,38 +1,60 @@
-import kueData from "/css/k.json";
-import plastikData from "/css/P.json";
+let kueData;
+let plastikData;
 
-let localKueData = kueData; // Data Kue
-let localPlastikData = plastikData; // Data Plastik
+// Mengambil data dari localStorage atau GitHub
+kueData = getFromLocalStorage('kueData');
+plastikData = getFromLocalStorage('plastikData');
 
-// Fetch data from local files and populate the tables
-fetchDataFromLocal();
+if (kueData && plastikData) {
+    generateItemRows(kueData.Kue, "kueBody");
+    generateItemRows(plastikData.Plastik, "plastikBody");
+    enableEditing();
+} else {
+    async function fetchData() {
+        const useNgrok = true; // Ganti ke false jika ingin menggunakan jalur GitHub/Vercel
+        const ngrokUrl = "https://<your-ngrok-url>.ngrok.io"; // URL Ngrok Anda
+        const githubUrl = "https://raw.githubusercontent.com/Missav-vip/P/refs/heads/main"; // URL GitHub Anda
+        const vercelUrl = "https://<your-vercel-app>.vercel.app/api"; // URL Vercel Anda
 
-function fetchDataFromLocal() {
-    try {
-        // Populate tables
-        generateItemRows(localKueData.Kue, "kueBody");
-        generateItemRows(localPlastikData.Plastik, "plastikBody");
+        let kueUrl, plastikUrl;
+
+        if (useNgrok) {
+            kueUrl = `${ngrokUrl}/k.json`;
+            plastikUrl = `${ngrokUrl}/p.json`;
+        } else {
+            kueUrl = `${vercelUrl}/k.json`;
+            plastikUrl = `${vercelUrl}/p.json`;
+        }
+
+        try {
+            // Mengambil data dari URL yang dipilih (Ngrok atau Vercel)
+            kueData = await (await fetch(kueUrl)).json();
+            plastikData = await (await fetch(plastikUrl)).json();
+        } catch (error) {
+            console.error("Failed to fetch from Ngrok or Vercel. Falling back to GitHub:", error);
+            // Jika gagal, fallback ke GitHub
+            kueData = await (await fetch(`${githubUrl}/k.json`)).json();
+            plastikData = await (await fetch(`${githubUrl}/p.json`)).json();
+        }
+
+        // Menampilkan data dalam tabel
+        generateItemRows(kueData.Kue, "kueBody");
+        generateItemRows(plastikData.Plastik, "plastikBody");
+
+        // Mengaktifkan fitur edit data
         enableEditing();
-
-        console.log("Data berhasil dimuat dari local file.");
-    } catch (error) {
-        console.error("Error fetching data from local storage:", error);
-        alert("Gagal memuat data. Silakan coba lagi nanti.");
     }
+    fetchData();
 }
 
-// Generate table rows
+// Fungsi untuk menghasilkan baris item dalam tabel
 function generateItemRows(data, tableId) {
     const tbody = document.getElementById(tableId);
-    tbody.innerHTML = ""; // Clear the table body
-
     data.forEach(group => {
-        // Add a row for the group name
         const groupRow = document.createElement("tr");
         groupRow.classList.add("table-subtitle");
         groupRow.innerHTML = `<td colspan="4"></td><td colspan="4">${group.group}</td><td colspan="3"></td>`;
         tbody.appendChild(groupRow);
-
         group.items.forEach(item => {
             const row = document.createElement("tr");
             row.innerHTML = tableId === "plastikBody" ? `
@@ -52,76 +74,50 @@ function generateItemRows(data, tableId) {
     });
 }
 
-// Enable editing for editable cells
+// Fungsi untuk mengaktifkan pengeditan data di sel tabel
 function enableEditing() {
     document.querySelectorAll(".editable").forEach(cell => {
         cell.addEventListener("click", function () {
             const newValue = prompt("Edit Value:", cell.innerText);
             if (newValue !== null) {
                 cell.innerText = newValue;
-                updateLocalData(cell, newValue); // Update changes in local data
+                updateDataObjects(cell, newValue);
             }
         });
     });
 }
 
-// Update data in local storage
-function updateLocalData(cell, newValue) {
-    try {
-        const row = cell.closest('tr');
-        const tableId = row.closest('table').id;
-        const itemIndex = Array.from(row.parentElement.children).indexOf(row) - 1;
+// Fungsi untuk memperbarui objek data saat ada perubahan
+function updateDataObjects(cell, newValue) {
+    const row = cell.closest('tr');
+    const tableId = row.closest('table').id;
+    const itemIndex = Array.from(row.parentElement.children).indexOf(row) - 1;
 
-        if (tableId === "plastikBody") {
-            const groupIndex = Math.floor(itemIndex / localPlastikData.Plastik[0].items.length);
-            const group = localPlastikData.Plastik[groupIndex];
-            const item = group.items[itemIndex % group.items.length];
-
-            // Update values based on column index
-            if (cell.cellIndex === 4) item.harga_dus = newValue;
-            if (cell.cellIndex === 5) item.harga_1_pak = newValue;
-            if (cell.cellIndex === 6) item.harga_1_pis = newValue;
-            if (cell.cellIndex === 7) item.harga_1_ons = newValue;
-            if (cell.cellIndex === 8) item.harga_1000_gram = newValue;
-            if (cell.cellIndex === 9) item.harga_500_gram = newValue;
-            if (cell.cellIndex === 10) item.harga_250_gram = newValue;
-
-            saveToLocalStorage("Plastik", localPlastikData);
-        } else {
-            const groupIndex = Math.floor(itemIndex / localKueData.Kue[0].items.length);
-            const group = localKueData.Kue[groupIndex];
-            const item = group.items[itemIndex % group.items.length];
-
-            // Update values based on column index
-            if (cell.cellIndex === 4) item.harga_dus = newValue;
-            if (cell.cellIndex === 5) item.harga_1000_gram = newValue;
-            if (cell.cellIndex === 6) item.harga_500_gram = newValue;
-            if (cell.cellIndex === 7) item.harga_250_gram = newValue;
-
-            saveToLocalStorage("Kue", localKueData);
-        }
-    } catch (error) {
-        console.error("Error updating data locally:", error);
-        alert("Gagal memperbarui data. Silakan coba lagi.");
+    if (tableId === "plastikBody") {
+        const item = plastikData.Plastik[itemIndex];
+        if (cell.cellIndex === 4) item.harga_dus = newValue;
+        if (cell.cellIndex === 5) item.harga_1_pak = newValue;
+        if (cell.cellIndex === 6) item.harga_1_pis = newValue;
+        if (cell.cellIndex === 7) item.harga_1_ons = newValue;
+        if (cell.cellIndex === 8) item.harga_1000_gram = newValue;
+        if (cell.cellIndex === 9) item.harga_500_gram = newValue;
+        if (cell.cellIndex === 10) item.harga_250_gram = newValue;
+    } else {
+        const item = kueData.Kue[itemIndex];
+        if (cell.cellIndex === 4) item.harga_dus = newValue;
+        if (cell.cellIndex === 5) item.harga_1000_gram = newValue;
+        if (cell.cellIndex === 6) item.harga_500_gram = newValue;
+        if (cell.cellIndex === 7) item.harga_250_gram = newValue;
     }
 }
 
-// Save data to localStorage
-function saveToLocalStorage(category, data) {
-    localStorage.setItem(category, JSON.stringify(data));
-    console.log(`${category} data has been saved to localStorage.`);
+// Fungsi untuk mengambil data dari localStorage
+function getFromLocalStorage(key) {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
 }
 
-// Load data from localStorage
-function loadFromLocalStorage() {
-    const kueData = JSON.parse(localStorage.getItem("Kue"));
-    const plastikData = JSON.parse(localStorage.getItem("Plastik"));
-
-    if (kueData) localKueData = kueData;
-    if (plastikData) localPlastikData = plastikData;
-
-    fetchDataFromLocal();
+// Fungsi untuk menghapus data dari localStorage
+function removeFromLocalStorage(key) {
+    localStorage.removeItem(key);
 }
-
-// Call this function when the page loads
-loadFromLocalStorage();
