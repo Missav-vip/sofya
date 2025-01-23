@@ -1,364 +1,238 @@
-<html>
 <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" href="table.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="table.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+<style>
+#downloadButton {
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    background-color: transparent;
+    color: #01dfff;
+    border: 2px solid #01dfff;
+    padding: 10px 20px;
+    font-size: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+</style>
 </head>
 <body>
-<div>
-<div class="search-container">
-<input type="text"></div>
-<div id="mainContent">
+    <div id="search-container">
+        <div class="search-container">
+            <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari data di tabel...">
+        </div>
+    </div>
 
-<h1>PLASTIK</h1>
-<div class="table-container overflow-x-auto"id="tablePlastik">
-<table id="dataTablePlastik"><thead>
-<div id="content-container"></div>
-<th rowspan="3">NO</th>
-<th colspan="3">DETAIL BARANG</th>
-<th colspan="14">ANALISIS PASAR</th></tr>
-<th rowspan="2">UKURAN</th>
-<th colspan="2">KODE</th>
-<th colspan="8">HARGA</th>
-<th colspan="2">STOK</th>
-<th colspan="2">TANGGAL</th></tr>
-<th>TOKO</th>
-<th>GUDANG</th>
-<th>DUS/BALL</th>
-<th>1 PACK</th>
-<th>1 PCS</th>
-<th>1000 GRAM</th>
-<th>500 GRAM</th>
-<th>250 GRAM</th>
-<th>100 GRAM</th>
-<th>50 GRAM</th>
-<th>GUDANG</th>
-<th>TOKO</th>
-<th>MASUK</th>
-<th>KELUAR</th></tr></thead><tbody></tbody></table></div>
-
-<!-- Tombol Unduh untuk Plastik -->
-<div style="text-align: center; margin-top: 20px;">
-    <button onclick="downloadDataPlastik()">
-        <i class="fas fa-download"></i>
+    <div id="mainContent">
+        <h1>KUE</h1>
+        <div class="table-container" id="tableKue">
+            <table id="dataTablekue">
+                <thead>
+                    <tr>
+                        <th class="no-column" rowspan="3">NO</th>
+                        <th class="detail-barang" colspan="3">DETAIL BARANG</th>
+                        <th class="analisis-pasar" colspan="14">ANALISIS PASAR</th>
+                    </tr>
+                    <tr>
+                        <th class="jenis-barang" rowspan="2">BARANG</th>
+                        <th class="kode" colspan="2">KODE</th>
+                        <th class="harga" colspan="6">HARGA</th>
+                        <th class="stok" colspan="2">STOK</th>
+                        <th class="tanggal" colspan="3">TANGGAL</th>
+                        <th class="aksi" colspan="2">AKSI</th> <!-- Kolom AKSI untuk SAVE dan HAPUS -->
+                    </tr>
+                    <tr>
+                        <th class="kode-gudang">TOKO</th>
+                        <th class="kode-gudang">GUDANG</th>
+                        <th class="dus">DUS / BALL</th>
+                        <th class="gram-1000">1000 GRAM</th>
+                        <th class="gram-500">500 GRAM</th>
+                        <th class="gram-250">250 GRAM</th>
+                        <th class="gram-100">100 GRAM</th>
+                        <th class="gram-50">50 GRAM</th>
+                        <th class="gudang">GUDANG</th>
+                        <th class="toko">TOKO</th>
+                        <th class="expayer">EXPAYER</th>
+                        <th class="masuk">MASUK</th>
+                        <th class="keluar">KELUAR</th>
+                        <th class="save">SAVE</th> <!-- Kolom SAVE -->
+                        <th class="hapus">HAPUS</th> <!-- Kolom HAPUS -->
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <button id="downloadButton" onclick="downloadTable()" style="margin-top: 20px;">
+        <i class="fas fa-download"></i> <!-- Menggunakan ikon unduh dari Font Awesome -->
     </button>
-</div>
+    <script src="karambia.js"></script>
+    <script>
+        // Namespace untuk Kue
+        const KueDB = {
+            dbName: "karambia",
+            storeName: "items",
+            db: null,
+            defaultData: [
+                { category: 'Tepung', items: [] },
+                { category: 'Mesis', items: [] },
+                { category: 'Selai', items: [] },
+                { category: 'Susu', items: [] },
+                { category: 'Gula', items: [] },
+                { category: 'Agar', items: [] },
+                { category: 'Puding', items: [] },
+                { category: 'Nutrijel', items: [] },
+                { category: 'Pewarna', items: [] },
+                { category: 'Minuman', items: [] },
+                { category: 'Margarine', items: [] },
+                { category: 'Coklat bubuk', items: [] },
+                { category: 'Chocolate chip', items: [] },
+                { category: 'Bahan pengemulsi', items: [] },
+                { category: 'Bahan pengembang', items: [] }
+            ],
 
-<h1>KUE</h1>
-<div class="table-container overflow-x-auto" id="tableKue">
-<table id="dataTablekue"><thead>
-<tr class="bg-gray-200">
-<th rowspan="3">NO</th>
-<th colspan="3">DETAIL BARANG</th>
-<th colspan="14">ANALISIS PASAR</th></tr>
-<th rowspan="2">BARANG</th>
-<th colspan="2">KODE</th>
-<th colspan="6">HARGA</th>
-<th colspan="2">STOK</th>
-<th colspan="3">TANGGAL</th></tr>
-<th>TOKO</th>
-<th>GUDANG</th>
-<th>DUS / BALL</th>
-<th>1000 GRAM</th>
-<th>500 GRAM</th>
-<th>250 GRAM</th>
-<th>100 GRAM</th>
-<th>50 GRAM</th>
-<th>GUDANG</th>
-<th>TOKO</th>
-<th>EXPAYER</th>
-<th>MASUK</th>
-<th>KELUAR</th></tr></thead><tbody id="tableBody"></tbody></table></div>
+            openDB: function() {
+                const request = indexedDB.open(this.dbName, 1);
+                request.onerror = function(event) {
+                    console.error("Database error: " + event.target.error);
+                };
+                request.onupgradeneeded = (event) => {
+                    this.db = event.target.result;
+                    if (!this.db.objectStoreNames.contains(this.storeName)) {
+                        const store = this.db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                        store.createIndex("by_category", "category", { unique: false });
+                    }
+                };
+                request.onsuccess = (event) => {
+                    this.db = event.target.result;
+                    this.loadDataFromDB();
+                };
+            },
 
-<!-- Tombol Unduh untuk Kue -->
-<div style="text-align: center; margin-top: 20px;">
-    <button onclick="downloadDataKue()">
-        <i class="fas fa-download"></i>
-    </button>
-</div>
+            saveItemToDB: function(categoryIndex, itemIndex) {
+                const item = this.defaultData[categoryIndex].items[itemIndex];
+                const transaction = this.db.transaction([this.storeName], "readwrite");
+                const store = transaction.objectStore(this.storeName);
+                store.put(item);
 
-<script src=".js"></script>
-<script src="js/clone.js"></script>
-<script>
+                transaction.oncomplete = function() {
+                    console.log("Item saved to IndexedDB.");
+                };
 
-//index.html
-        // Nama Database dan Store
-const dbNamePlastik = "plastikDB";
-const storeNamePlastik = "items";
-let dbPlastik;
+                transaction.onerror = function(event) {
+                    console.error("Error saving to IndexedDB:", event.target.error);
+                };
+            },
 
-const dbNameKue = "kueDB";
-const storeNameKue = "items";
-let dbKue;
+            loadDataFromDB: function() {
+                const transaction = this.db.transaction([this.storeName], "readonly");
+                const store = transaction.objectStore(this.storeName);
+                const request = store.getAll();
 
-// Membuka IndexedDB
-function openDBPlastik() {
-    const request = indexedDB.open(dbNamePlastik, 1);
+                request.onsuccess = (event) => {
+                    const items = event.target.result;
+                    items.forEach(item => {
+                        const category = this.defaultData.find(c => c.category === item.category);
+                        if (category) {
+                            category.items.push(item);
+                        } else {
+                            this.defaultData.push({ category: item.category, items: [item] });
+                        }
+                    });
+                    this.loadTableFromHtml();
+                };
 
-    request.onerror = function (event) {
-        console.error("Database error: " + event.target.error);
-    };
+                request.onerror = function(event) {
+                    console.error("Error loading data from IndexedDB:", event.target.error);
+                };
+            },
 
-    request.onupgradeneeded = function (event) {
-        dbPlastik = event.target.result;
-        if (!dbPlastik.objectStoreNames.contains(storeNamePlastik)) {
-            const store = dbPlastik.createObjectStore(storeNamePlastik, { keyPath: 'id', autoIncrement: true });
-            store.createIndex("by_category", "category", { unique: false });
-        }
-    };
+            deleteItemFromDB: function(categoryIndex, itemIndex) {
+                const itemId = this.defaultData[categoryIndex].items[itemIndex].id;
+                const transaction = this.db.transaction([this.storeName], "readwrite");
+                const store = transaction.objectStore(this.storeName);
+                store.delete(itemId);
 
-    request.onsuccess = function (event) {
-        dbPlastik = event.target.result;
-        loadDataFromDBPlastik();
-    };
-}
+                transaction.oncomplete = () => {
+                    console.log("Item deleted from IndexedDB.");
+                    this.loadDataFromDB();
+                };
 
-function openDBKue() {
-    const request = indexedDB.open(dbNameKue, 1);
+                transaction.onerror = function(event) {
+                    console.error("Error deleting from IndexedDB:", event.target.error);
+                };
+            },
 
-    request.onerror = function (event) {
-        console.error("Database error: " + event.target.error);
-    };
+            saveItem: function(categoryIndex, itemIndex) {
+                const item = this.defaultData[categoryIndex].items[itemIndex];
+                const updatedCells = document.querySelectorAll(`[data-category="${categoryIndex}"][data-item="${itemIndex}"]`);
 
-    request.onupgradeneeded = function (event) {
-        dbKue = event.target.result;
-        if (!dbKue.objectStoreNames.contains(storeNameKue)) {
-            const store = dbKue.createObjectStore(storeNameKue, { keyPath: 'id', autoIncrement: true });
-            store.createIndex("by_category", "category", { unique: false });
-        }
-    };
+                updatedCells.forEach(cell => {
+                    const columnName = cell.cellIndex;
+                    switch (columnName) {
+                        case 0: item.NO = cell.textContent; break;
+                        case 1: item.BARANG = cell.textContent; break;
+                        case 2: item.KODE_TOKO = cell.textContent; break;
+                        case 3: item.KODE_GUDANG = cell.textContent; break;
+                        case 4: item.HARGA["DUS / BALL"] = cell.textContent; break;
+                        case 5: item.HARGA["1000 GRAM"] = cell.textContent; break;
+                        case 6: item.HARGA["500 GRAM"] = cell.textContent; break;
+                        case 7: item.HARGA["250 GRAM"] = cell.textContent; break;
+                        case 8: item.HARGA["100 GRAM"] = cell.textContent; break;
+                        case 9: item.HARGA["50 GRAM"] = cell.textContent; break;
+                        case 10: item.STOK.GUDANG = cell.textContent; break;
+                        case 11: item.STOK.TOKO = cell.textContent; break;
+                    }
+                });
+                this.saveItemToDB(categoryIndex, itemIndex);
 
-    request.onsuccess = function (event) {
-        dbKue = event.target.result;
-        loadDataFromDBKue();
-    };
-}
+                // Sembunyikan tombol save setelah menyimpan
+                const saveButton = document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`);
+                if (saveButton) {
+                    saveButton.style.display = 'none';
+                }
+            },
 
-// Fungsi untuk memuat data dari IndexedDB dan mengisi tabel
-function loadDataFromDBPlastik() {
-    const transaction = dbPlastik.transaction([storeNamePlastik], "readonly");
-    const store = transaction.objectStore(storeNamePlastik);
+            deleteItem: function(categoryIndex, itemIndex) {
+                this.deleteItemFromDB(categoryIndex, itemIndex);
+                this.defaultData[categoryIndex].items.splice(itemIndex, 1);
+                this.loadTableFromHtml();
+            },
 
-    const request = store.getAll();
+            updateDate: function(categoryIndex, itemIndex, dateType, value) {
+                const item = this.defaultData[categoryIndex].items[itemIndex];
+                item.TANGGAL[dateType] = value;
 
-    request.onsuccess = function (event) {
-        const items = event.target.result;
-        items.forEach(item => {
-            const category = defaultDataPlastik.find(c => c.category === item.category);
-            if (category) {
-                category.items.push(item);
-            } else {
-                defaultDataPlastik.push({ category: item.category, items: [item] });
+                // Tampilkan tombol save setelah ada perubahan
+                const saveButton = document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`);
+                if (saveButton) {
+                    saveButton.style.display = 'inline-block';
+                }
+            },
+
+            addRp: function(element) {
+                let value = element.textContent.replace(/[^0-9]/g, ''); // Menghapus karakter non-angka
+                if (value === '') {
+                    value = '0';
+                }
+                value = 'Rp ' + value + ',00';
+                element.textContent = value;
             }
+        };
+
+        // Memanggil fungsi untuk memulai IndexedDB
+        KueDB.openDB();
+
+        // Mengatur event blur untuk setiap cell harga
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.currency').forEach(cell => {
+                cell.addEventListener('blur', function() {
+                    KueDB.addRp(this); // Menambahkan format saat selesai edit
+                });
+            });
         });
-        loadTableFromHtmlPlastik();
-    };
-
-    request.onerror = function (event) {
-        console.error("Error loading data from IndexedDB:", event.target.error);
-    };
-}
-
-function loadDataFromDBKue() {
-    const transaction = dbKue.transaction([storeNameKue], "readonly");
-    const store = transaction.objectStore(storeNameKue);
-
-    const request = store.getAll();
-
-    request.onsuccess = function (event) {
-        const items = event.target.result;
-        items.forEach(item => {
-            const category = defaultDataKue.find(c => c.category === item.category);
-            if (category) {
-                category.items.push(item);
-            } else {
-                defaultDataKue.push({ category: item.category, items: [item] });
-            }
-        });
-        loadTableFromHtmlKue();
-    };
-
-    request.onerror = function (event) {
-        console.error("Error loading data from IndexedDB:", event.target.error);
-    };
-}
-
-// Data barang awal
-const defaultDataPlastik = [
-    { category: 'PP Neo (0,3)', items: [] },
-        { category: 'PP Neo (0,5)', items: [] },
-        { category: 'PP STP (standing pouch)', items: [] },
-        { category: 'PP Wayang', items: [] },
-        { category: 'PP +', items: [] },
-        { category: 'PP +', items: [] },
-        { category: 'OPP', items: [] },
-        { category: 'PE Tomat', items: [] },
-        { category: 'PE Andalan', items: [] },
-        { category: 'PE Klip', items: [] },
-        { category: 'PE +', items: [] },
-        { category: 'PE +', items: [] },
-        { category: 'THINWALL', items: [] },
-        { category: 'CUP', items: [] },
-        { category: 'MIKA', items: [] },
-        { category: 'PIRING', items: [] },
-        { category: 'MANGKOK', items: [] },
-        { category: 'FOAM', items: [] },
-        { category: 'KERTAS', items: [] },
-        { category: 'TISU', items: [] },
-        { category: 'DUS', items: [] },
-        { category: 'RICEBOWL', items: [] },
-        { category: 'BUBBLE WRAP', items: [] }
-    ];
-
-const defaultDataKue = [
-    { category: 'Tepung', items: [] },
-        { category: 'Mesis', items: [] },
-        { category: 'Selai', items: [] },
-        { category: 'Susu', items: [] },
-        { category: 'Gula', items: [] },
-        { category: 'Agar', items: [] },
-        { category: 'Puding', items: [] },
-        { category: 'Nutrijel', items: [] },
-        { category: 'Pewarna', items: [] },
-        { category: 'Minuman', items: [] },
-        { category: 'Margarine', items: [] },
-        { category: 'Coklat bubuk', items: [] },
-        { category: 'Chocolate chip', items: [] },
-        { category: 'Bahan pengemulsi', items: [] },
-        { category: 'Bahan pengemban', items: [] }
-    ];
-
-// Fungsi untuk memuat data dari defaultData ke tabel
-function loadTableFromHtmlPlastik() {
-    const tbody = document.querySelector("#dataTablePlastik tbody");
-    tbody.innerHTML = '';
-
-    defaultDataPlastik.forEach((category, categoryIndex) => {
-        const subTitleRow = document.createElement("tr");
-        subTitleRow.classList.add("bg-gray-100");
-        subTitleRow.innerHTML = `<td colspan="18" class="font-bold-block text-center">
-                            ${category.category}
-                          </td>`;
-        tbody.appendChild(subTitleRow);
-
-        category.items.forEach((item, itemIndex) => {
-            const row = document.createElement("tr");
-            row.classList.add("bg-white");
-            row.dataset.category = categoryIndex;
-            row.dataset.item = itemIndex;
-            row.innerHTML = `
-                <td>${item.NO}</td>
-                <td>${item.BARANG}</td>
-                <td>${item.KODE_TOKO}</td>
-                <td>${item.KODE_GUDANG}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', 'DUS/BALL', this.innerText)">${formatCurrency(item.HARGA["DUS/BALL"])}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '1 PACK', this.innerText)">${formatCurrency(item.HARGA["1 PACK"])}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '1 PCS', this.innerText)">${formatCurrency(item.HARGA["1 PCS"])}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '1000 GRAM', this.innerText)">${formatCurrency(item.HARGA["1000 GRAM"])}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '500 GRAM', this.innerText)">${formatCurrency(item.HARGA["500 GRAM"])}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '250 GRAM', this.innerText)">${formatCurrency(item.HARGA["250 GRAM"])}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '100 GRAM', this.innerText)">${formatCurrency(item.HARGA["100 GRAM"])}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '50 GRAM', this.innerText)">${formatCurrency(item.HARGA["50 GRAM"])}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'STOK', 'GUDANG', this.innerText)">${item.STOK.GUDANG}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'STOK', 'TOKO', this.innerText)">${item.STOK.TOKO}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'TANGGAL', 'MASUK', this.innerText)">${formatDate(item.TANGGAL.MASUK)}</td>
-                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'TANGGAL', 'KELUAR', this.innerText)">${formatDate(item.TANGGAL.KELUAR)}</td>
-            `;
-            tbody.appendChild(row);
-        });
-    });
-}
-
-function loadTableFromHtmlKue() {
-    const tbody = document.querySelector("#tableBody");
-    tbody.innerHTML = '';
-
-    defaultDataKue.forEach((category, categoryIndex) => {
-        const subTitleRow = document.createElement("tr");
-        subTitleRow.classList.add("bg-gray-100");
-        subTitleRow.innerHTML = `<td colspan="18" class="font-bold-block text-center">
-                            ${category.category}
-                          </td>`;
-        tbody.appendChild(subTitleRow);
-
-        category.items.forEach((item, itemIndex) => {
-            const row = document.createElement("tr");
-            row.classList.add("bg-white");
-            row.dataset.category = categoryIndex;
-            row.dataset.item = itemIndex;
-            row.innerHTML = `
-                <td>${item.NO}</td>
-                <td>${item.BARANG}</td>
-                <td>${item.KODE_TOKO}</td>
-                <td>${item.KODE_GUDANG}</td>
-                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', 'DUS / BALL', this.innerText)">${formatCurrency(item.HARGA["DUS / BALL"])}</td>
-                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', '1000 GRAM', this.innerText)">${formatCurrency(item.HARGA["1000 GRAM"])}</td>
-                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', '500 GRAM', this.innerText)">${formatCurrency(item.HARGA["500 GRAM"])}</td>
-                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', '250 GRAM', this.innerText)">${formatCurrency(item.HARGA["250 GRAM"])}</td>
-                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', '100 GRAM', this.innerText)">${formatCurrency(item.HARGA["100 GRAM"])}</td>
-                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', '50 GRAM', this.innerText)">${formatCurrency(item.HARGA["50 GRAM"])}</td>
-                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'STOK', 'GUDANG', this.innerText)">${item.STOK.GUDANG}</td>
-                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'STOK', 'TOKO', this.innerText)">${item.STOK.TOKO}</td>
-                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'TANGGAL', 'EXPAYER', this.innerText)">${formatDate(item.TANGGAL.EXPAYER)}</td>
-                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'TANGGAL', 'MASUK', this.innerText)">${formatDate(item.TANGGAL.MASUK)}</td>
-                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'TANGGAL', 'KELUAR', this.innerText)">${formatDate(item.TANGGAL.KELUAR)}</td>
-            `;
-            tbody.appendChild(row);
-        });
-    });
-}
-
-// Fungsi untuk format harga
-function formatCurrency(value) {
-    if (value === undefined || value === null || value === '') {
-        return '—';
-    }
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 2
-    }).format(value);
-}
-
-// Fungsi untuk format tanggal
-function formatDate(dateString) {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-}
-
-// Fungsi untuk mengunduh data Plastik
-function downloadDataPlastik() {
-    const dataPlastik = JSON.stringify(defaultDataPlastik, null, 2);
-    const blob = new Blob([`Plastik Data:\n${dataPlastik}`], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'data_plastik.json';
-    a.click();
-    URL.revokeObjectURL(url);
-}
-
-// Fungsi untuk mengunduh data Kue
-function downloadDataKue() {
-    const dataKue = JSON.stringify(defaultDataKue, null, 2);
-    const blob = new Blob([`Kue Data:\n${dataKue}`], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'data_kue.json';
-    a.click();
-    URL.revokeObjectURL(url);
-}
-
-// Fungsi untuk memperbarui item Plastik di IndexedDB
-function updateItemPlastik(categoryIndex, itemIndex, field, subfield, value) {
-    const transaction = dbPlastik.transaction([storeNamePlastik], "readwrite");
-    const store = transaction.objectStore(storeNamePlastik);
-    const item = defaultDataPlastik[categoryIndex].items[itemIndex];
-
-    if (subfield) {
-        item[field][subfield] = parseFloat(value.replace(/[^0-9.-]+/
+    </script>
+</body>
