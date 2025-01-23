@@ -1,36 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stok</title>
-    <link rel="stylesheet" href="css/daftarbarang.css">
-    <link rel="stylesheet" href="css/z.css">
+<meta charset="UTF-8">
+    <link rel="stylesheet" href="table.css">
+<script>
+   .save-button, .delete-button {
+        font-size: 20px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .save-button:hover, .delete-button:hover {
+        transform: scale(1.2);
+    }
+</script>
 </head>
 <body>
-    <div class="search-container"><input type="text" id="searchInput" placeholder="Cari barang..."/></div>
-    <h2>Kue</h2>
-    <div class="table-container">
-        <table id="tableKue">
-            <thead>
-                <tr><th rowspan="3">No</th><th colspan="3">Detail Kode Barang</th><th colspan="4">Harga</th><th colspan="2">Stok</th><th colspan="2">Tanggal</th></tr>
-                <tr><th>Nama Barang</th><th>Kode Gudang</th><th>Kode Toko</th><th>Harga 1 Dus</th><th>1000 Gram</th><th>500 Gram</th><th>250 Gram</th><th>Gudang</th><th>Toko</th><th>Masuk</th><th>Keluar</th></tr>
-            </thead>
-            <tbody id="kueBody"></tbody>
-        </table>
+<div id="search-container">
+    <div class="search-container">
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari data di tabel...">
     </div>
+</div>  
 
-    <h2>Plastik</h2>
-    <div class="table-container">
-        <table id="tablePlastik">
+<div id="mainContent">
+    <h1>PLASTIK</h1>
+    <div class="table-container" id="tablePlastik">
+        <table id="dataTablePlastik" class="table-plastik">
             <thead>
-                <tr><th rowspan="3">No</th><th colspan="3">Detail Kode Barang</th><th colspan="7">Harga</th><th colspan="2">Stok</th><th colspan="2">Tanggal</th></tr>
-                <tr><th>Ukuran</th><th>Kode Gudang</th><th>Kode Toko</th><th>Harga 1 Dus</th><th>Harga 1 Pak</th><th>Harga 1 Pis</th><th>Harga 1 Ons</th><th>1000 Gram</th><th>500 Gram</th><th>250 Gram</th><th>Gudang</th><th>Toko</th><th>Masuk</th><th>Keluar</th></tr>
+                <tr>
+                    <th class="no-column" rowspan="3">NO</th>
+                    <th class="detail-barang" colspan="3">DETAIL BARANG</th>
+                    <th class="analisis-pasar" colspan="14">ANALISIS PASAR</th>
+                </tr>
+                <tr>
+                    <th class="jenis-barang" rowspan="2">UKURAN</th>
+                    <th class="kode" colspan="2">KODE</th>
+                    <th class="harga" colspan="8">HARGA</th>
+                    <th class="stok" colspan="2">STOK</th>
+                    <th class="tanggal" colspan="2">TANGGAL</th>
+<th class="aksi" colspan="2">AKSI</th> 
+                </tr>
+                <tr>
+                    <th class="kode-gudang">TOKO</th>
+                    <th class="kode-gudang">GUDANG</th>
+                    <th class="dus">DUS/BALL</th>
+                    <th class="pack">1 PACK</th>
+                    <th class="pcs">1 PCS</th>
+                    <th class="gram-1000">1000 GRAM</th>
+                    <th class="gram-500">500 GRAM</th>
+                    <th class="gram-250">250 GRAM</th>
+                    <th class="gram-100">100 GRAM</th>
+                    <th class="gram-50">50 GRAM</th>
+                    <th class="gudang">GUDANG</th>
+                    <th class="toko">TOKO</th>
+                    <th class="masuk">MASUK</th>
+                    <th class="keluar">KELUAR</th>
+<th class="save">SAVE</th> 
+                        <th class="hapus">HAPUS</th>
+                </tr>
             </thead>
-            <tbody id="plastikBody"></tbody>
+            <tbody>
+            </tbody>
         </table>
-    </div>
-  
-    <script src="js/bentuk.js"></script>
+    </div>   
+</div>
+<script src="js/lello.js"></script>
+<script>
+
+</script>
 </body>
 </html>
