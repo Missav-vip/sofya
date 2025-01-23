@@ -248,21 +248,21 @@ function loadTableFromHtmlPlastik() {
             row.dataset.item = itemIndex;
             row.innerHTML = `
                 <td>${item.NO}</td>
-                <td>${item.BARANG}</td>
-                <td>${item.KODE_TOKO}</td>
-                <td>${item.KODE_GUDANG}</td>
-                <td>${formatCurrency(item.HARGA["DUS/BALL"])}</td>
-                <td>${formatCurrency(item.HARGA["1 PACK"])}</td>
-                <td>${formatCurrency(item.HARGA["1 PCS"])}</td>
-                <td>${formatCurrency(item.HARGA["1000 GRAM"])}</td>
-                <td>${formatCurrency(item.HARGA["500 GRAM"])}</td>
-                <td>${formatCurrency(item.HARGA["250 GRAM"])}</td>
-                <td>${formatCurrency(item.HARGA["100 GRAM"])}</td>
-                <td>${formatCurrency(item.HARGA["50 GRAM"])}</td>
-                <td>${item.STOK.GUDANG}</td>
-                <td>${item.STOK.TOKO}</td>
-                <td>${formatDate(item.TANGGAL.MASUK)}</td>
-                <td>${formatDate(item.TANGGAL.KELUAR)}</td>
+                <td contenteditable="true">${item.BARANG}</td>
+                <td contenteditable="true">${item.KODE_TOKO}</td>
+                <td contenteditable="true">${item.KODE_GUDANG}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["DUS/BALL"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["1 PACK"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["1 PCS"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["1000 GRAM"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["500 GRAM"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["250 GRAM"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["100 GRAM"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["50 GRAM"])}</td>
+                <td contenteditable="true">${item.STOK.GUDANG}</td>
+                <td contenteditable="true">${item.STOK.TOKO}</td>
+                <td contenteditable="true">${formatDate(item.TANGGAL.MASUK)}</td>
+                <td contenteditable="true">${formatDate(item.TANGGAL.KELUAR)}</td>
             `;
             tbody.appendChild(row);
         });
@@ -288,20 +288,20 @@ function loadTableFromHtmlKue() {
             row.dataset.item = itemIndex;
             row.innerHTML = `
                 <td>${item.NO}</td>
-                <td>${item.BARANG}</td>
-                <td>${item.KODE_TOKO}</td>
-                <td>${item.KODE_GUDANG}</td>
-                <td>${formatCurrency(item.HARGA["DUS / BALL"])}</td>
-                <td>${formatCurrency(item.HARGA["1000 GRAM"])}</td>
-                <td>${formatCurrency(item.HARGA["500 GRAM"])}</td>
-                <td>${formatCurrency(item.HARGA["250 GRAM"])}</td>
-                <td>${formatCurrency(item.HARGA["100 GRAM"])}</td>
-                <td>${formatCurrency(item.HARGA["50 GRAM"])}</td>
-                <td>${item.STOK.GUDANG}</td>
-                <td>${item.STOK.TOKO}</td>
-                <td>${formatDate(item.TANGGAL.EXPAYER)}</td>
-                <td>${formatDate(item.TANGGAL.MASUK)}</td>
-                <td>${formatDate(item.TANGGAL.KELUAR)}</td>
+                <td contenteditable="true">${item.BARANG}</td>
+                <td contenteditable="true">${item.KODE_TOKO}</td>
+                <td contenteditable="true">${item.KODE_GUDANG}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["DUS / BALL"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["1000 GRAM"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["500 GRAM"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["250 GRAM"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["100 GRAM"])}</td>
+                <td contenteditable="true">${formatCurrency(item.HARGA["50 GRAM"])}</td>
+                <td contenteditable="true">${item.STOK.GUDANG}</td>
+                <td contenteditable="true">${item.STOK.TOKO}</td>
+                <td contenteditable="true">${formatDate(item.TANGGAL.EXPAYER)}</td>
+                <td contenteditable="true">${formatDate(item.TANGGAL.MASUK)}</td>
+                <td contenteditable="true">${formatDate(item.TANGGAL.KELUAR)}</td>
             `;
             tbody.appendChild(row);
         });
