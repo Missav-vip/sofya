@@ -1,7 +1,7 @@
 // Namespace untuk Kue
 const KueDB = {
-    dbName: "kueDB",
-    storeName: "items",
+    dbName: "VIP",
+    storeName: "GRUP",
     db: null,
     defaultData: [
         { category: 'Tepung', items: [] },
