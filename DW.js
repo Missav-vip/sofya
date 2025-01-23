@@ -21,36 +21,40 @@ function downloadTable() {
                 return;
             }
 
-            // Extract data for download
-            let csvContent = "NO,BARANG,KODE_TOKO,KODE_GUDANG,HARGA_DUS,BALL_1000G,BALL_500G,BALL_250G,BALL_100G,BALL_50G,STOK_GUDANG,STOK_TOKO,TANGGAL_EXPAYER,TANGGAL_MASUK,TANGGAL_KELUAR\n";
+            // Filter data to include only relevant fields
+            const filteredData = data.map(item => ({
+                NO: item.NO || "",
+                BARANG: item.BARANG || "",
+                KODE_TOKO: item.KODE_TOKO || "",
+                KODE_GUDANG: item.KODE_GUDANG || "",
+                HARGA: {
+                    "DUS / BALL": item.HARGA?.["DUS / BALL"] || "",
+                    "1000 GRAM": item.HARGA?.["1000 GRAM"] || "",
+                    "500 GRAM": item.HARGA?.["500 GRAM"] || "",
+                    "250 GRAM": item.HARGA?.["250 GRAM"] || "",
+                    "100 GRAM": item.HARGA?.["100 GRAM"] || "",
+                    "50 GRAM": item.HARGA?.["50 GRAM"] || "",
+                },
+                STOK: {
+                    GUDANG: item.STOK?.GUDANG || "",
+                    TOKO: item.STOK?.TOKO || "",
+                },
+                TANGGAL: {
+                    EXPAYER: item.TANGGAL?.EXPAYER || "",
+                    MASUK: item.TANGGAL?.MASUK || "",
+                    KELUAR: item.TANGGAL?.KELUAR || "",
+                },
+            }));
 
-            data.forEach((item) => {
-                const row = [
-                    item.NO || "",
-                    item.BARANG || "",
-                    item.KODE_TOKO || "",
-                    item.KODE_GUDANG || "",
-                    item.HARGA?.["DUS / BALL"] || "",
-                    item.HARGA?.["1000 GRAM"] || "",
-                    item.HARGA?.["500 GRAM"] || "",
-                    item.HARGA?.["250 GRAM"] || "",
-                    item.HARGA?.["100 GRAM"] || "",
-                    item.HARGA?.["50 GRAM"] || "",
-                    item.STOK?.GUDANG || "",
-                    item.STOK?.TOKO || "",
-                    item.TANGGAL?.EXPAYER || "",
-                    item.TANGGAL?.MASUK || "",
-                    item.TANGGAL?.KELUAR || "",
-                ].join(",");
-                csvContent += row + "\n";
-            });
+            // Convert to JSON
+            const jsonContent = JSON.stringify(filteredData, null, 2);
 
             // Create a blob and download the file
-            const blob = new Blob([csvContent], { type: "text/csv" });
+            const blob = new Blob([jsonContent], { type: "application/json" });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "kue_data.csv";
+            a.download = "kue_data.json";
             a.style.display = "none";
             document.body.appendChild(a);
             a.click();
