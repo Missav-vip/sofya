@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Data JSON</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #uploadContainer {
+            margin: 20px auto;
+        }
+        #fileInput {
+            margin: 20px 0;
+        }
+        #uploadButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #uploadButton:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload Data JSON</h1>
+    <div id="uploadContainer">
+        <input type="file" id="fileInput" accept=".json">
+        <button id="uploadButton">Upload Data</button>
+    </div>
+    <div id="resultMessage"></div>
+
+    <script>
+        const uploadButton = document.getElementById('uploadButton');
+        const fileInput = document.getElementById('fileInput');
+        const resultMessage = document.getElementById('resultMessage');
+
+        uploadButton.addEventListener('click', () => {
+            const file = fileInput.files[0];
+            if (!file) {
+                resultMessage.textContent = "Silakan pilih file JSON terlebih dahulu.";
+                resultMessage.style.color = "red";
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const jsonData = JSON.parse(event.target.result);
+                    uploadData(jsonData);
+                } catch (error) {
+                    resultMessage.textContent = "File JSON tidak valid.";
+                    resultMessage.style.color = "red";
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        function uploadData(jsonData) {
+            const request = indexedDB.open("VIP", 1);
+
+            request.onsuccess = function(event) {
+                const db = event.target.result;
+                const transaction = db.transaction(["GRUP"], "readwrite");
+                const store = transaction.objectStore("GRUP");
+
+                // Tambahkan data dari JSON ke IndexedDB
+                jsonData.forEach((item) => {
+                    store.put(item);
+                });
+
+                transaction.oncomplete = function() {
+                    resultMessage.textContent = "Data berhasil diupload ke database!";
+                    resultMessage.style.color = "green";
+                };
+
+                transaction.onerror = function(event) {
+                    resultMessage.textContent = "Terjadi kesalahan saat mengupload data.";
+                    resultMessage.style.color = "red";
+                    console.error("Error:", event.target.error);
+                };
+            };
+
+            request.onerror = function(event) {
+                resultMessage.textContent = "Database tidak dapat diakses.";
+                resultMessage.style.color = "red";
+                console.error("Database error:", event.target.error);
+            };
+        }
+    </script>
+</body>
+</html>
