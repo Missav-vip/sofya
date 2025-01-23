@@ -1,428 +1,117 @@
-<html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="table.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
-            background-color: #f0f0f0;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
+h1, .search-container {
             text-align: center;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            font-size: 36px;
-            color: #333;
-        }
-        .download-options {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .download-options a {
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .download-options a i {
-            font-size: 20px;
-        }
-        .search-container {
-            margin-bottom: 20px;
-            text-align: center;
+            color: black;
         }
         .search-container input {
-            padding: 10px;
-            width: 80%;
-            max-width: 400px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 20px;
+            width: 90%;
+            height: 60px;
+            border-radius: 30px;
+            border: 3px solid #444;
+            background:#01dfff;
+            box-shadow: 8px 8px 15px #44dede, -8px -8px 15px #58ffff;
+            transition: all 0.3s ease-in-out;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+        }
+        .search-container input:focus {
+            box-shadow: inset 8px 8px 15px #ffffff, inset -8px -8px 15px #ffffff, 
+                        8px 8px 15px #44dede, -8px -8px 15px #58ffff;
+            outline: none;
+            border: 3px solid #333;
         }
         .table-container {
-            margin-bottom: 40px;
+            width: 100%;
+            overflow-x: auto;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            color: black;
+            background: white;
+				border: 2px solid black;
+				
+
         }
+table th, table td {
+    border: 2px solid black;
+	
+}
+
+table th {
+    border: 2px solid white;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+	
+}
+
+table td {
+    font-size: 20px;
+		font-family: 'Roboto', sans-serif;
+}
+
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            border: 2px solid white;
+            padding: 10px;
             text-align: center;
+            white-space: nowrap;
+				
         }
         th {
-            background-color: #f2f2f2;
+           background: black;
+				color: white;
+				font-weight: bold;
+				font-size: 25px;
+
         }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>File Saya</h1>
-        </div>
-        <div class="search-container">
-            <input type="text" placeholder="Cari...">
-        </div>
-        <div id="mainContent">
-            <h1>PLASTIK</h1>
-            <div class="table-container overflow-x-auto" id="tablePlastik">
-                <table id="dataTablePlastik">
-                    <thead>
-                        <tr>
-                            <th rowspan="3">NO</th>
-                            <th colspan="3">DETAIL BARANG</th>
-                            <th colspan="14">ANALISIS PASAR</th>
-                        </tr>
-                        <tr>
-                            <th rowspan="2">UKURAN</th>
-                            <th colspan="2">KODE</th>
-                            <th colspan="8">HARGA</th>
-                            <th colspan="2">STOK</th>
-                            <th colspan="2">TANGGAL</th>
-                        </tr>
-                        <tr>
-                            <th>TOKO</th>
-                            <th>GUDANG</th>
-                            <th>DUS/BALL</th>
-                            <th>1 PACK</th>
-                            <th>1 PCS</th>
-                            <th>1000 GRAM</th>
-                            <th>500 GRAM</th>
-                            <th>250 GRAM</th>
-                            <th>100 GRAM</th>
-                            <th>50 GRAM</th>
-                            <th>GUDANG</th>
-                            <th>TOKO</th>
-                            <th>MASUK</th>
-                            <th>KELUAR</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div class="download-options">
-                <a href="#" id="download-all-plastik">
-                    <i class="fas fa-download"></i> Unduh Semua
-                </a>
-                <a href="#" id="download-new-plastik">
-                    <i class="fas fa-download"></i> Unduh Yang Baru Saja
-                </a>
-            </div>
+        .table-plastik th {
+            background:black;
+        }
+        .sub-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 500px;
+            padding: 15px 0;
+            color: black;
+            background: #f0f0f0;
+        }
+    td[contenteditable="true"] {
+        transition: background-color 0.3s ease;
+    }
+    td[contenteditable="true"]:focus {
+        background-color: #e0f7fa;
+        outline: none;
+    }
+    .changed {
+        background-color: #ffeb3b !important;
+    }
 
-            <h1>KUE</h1>
-            <div class="table-container overflow-x-auto" id="tableKue">
-                <table id="dataTablekue">
-                    <thead>
-                        <tr class="bg-gray-200">
-                            <th rowspan="3">NO</th>
-                            <th colspan="3">DETAIL BARANG</th>
-                            <th colspan="14">ANALISIS PASAR</th>
-                        </tr>
-                        <tr>
-                            <th rowspan="2">BARANG</th>
-                            <th colspan="2">KODE</th>
-                            <th colspan="6">HARGA</th>
-                            <th colspan="2">STOK</th>
-                            <th colspan="3">TANGGAL</th>
-                        </tr>
-                        <tr>
-                            <th>TOKO</th>
-                            <th>GUDANG</th>
-                            <th>DUS / BALL</th>
-                            <th>1000 GRAM</th>
-                            <th>500 GRAM</th>
-                            <th>250 GRAM</th>
-                            <th>100 GRAM</th>
-                            <th>50 GRAM</th>
-                            <th>GUDANG</th>
-                            <th>TOKO</th>
-                            <th>EXPAYER</th>
-                            <th>MASUK</th>
-                            <th>KELUAR</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
-            </div>
-            <div class="download-options">
-                <a href="#" id="download-all-kue">
-                    <i class="fas fa-download"></i> Unduh Semua
-                </a>
-                <a href="#" id="download-new-kue">
-                    <i class="fas fa-download"></i> Unduh Yang Baru Saja
-                </a>
-            </div>
-        </div>
-    </div>
-    <script src=".js"></script>
-    <script src="js/clone.js"></script>
-    <script>
-        //index.html
-        // Nama Database dan Store
-        const dbNamePlastik = "plastikDB";
-        const storeNamePlastik = "items";
-        let dbPlastik;
 
-        const dbNameKue = "kueDB";
-        const storeNameKue = "items";
-        let dbKue;
-
-        // Membuka IndexedDB
-        function openDBPlastik() {
-            const request = indexedDB.open(dbNamePlastik, 1);
-
-            request.onerror = function (event) {
-                console.error("Database error: " + event.target.error);
-            };
-
-            request.onupgradeneeded = function (event) {
-                dbPlastik = event.target.result;
-                if (!dbPlastik.objectStoreNames.contains(storeNamePlastik)) {
-                    const store = dbPlastik.createObjectStore(storeNamePlastik, { keyPath: 'id', autoIncrement: true });
-                    store.createIndex("by_category", "category", { unique: false });
-                }
-            };
-
-            request.onsuccess = function (event) {
-                dbPlastik = event.target.result;
-                loadDataFromDBPlastik();
-            };
+ .save-button, .delete-button {
+            font-size: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
         }
 
-        function openDBKue() {
-            const request = indexedDB.open(dbNameKue, 1);
-
-            request.onerror = function (event) {
-                console.error("Database error: " + event.target.error);
-            };
-
-            request.onupgradeneeded = function (event) {
-                dbKue = event.target.result;
-                if (!dbKue.objectStoreNames.contains(storeNameKue)) {
-                    const store = dbKue.createObjectStore(storeNameKue, { keyPath: 'id', autoIncrement: true });
-                    store.createIndex("by_category", "category", { unique: false });
-                }
-            };
-
-            request.onsuccess = function (event) {
-                dbKue = event.target.result;
-                loadDataFromDBKue();
-            };
+        .save-button:hover, .delete-button:hover {
+            transform: scale(1.2);
         }
 
-        // Fungsi untuk memuat data dari IndexedDB dan mengisi tabel
-        function loadDataFromDBPlastik() {
-            const transaction = dbPlastik.transaction([storeNamePlastik], "readonly");
-            const store = transaction.objectStore(storeNamePlastik);
-
-            const request = store.getAll();
-
-            request.onsuccess = function (event) {
-                const items = event.target.result;
-                items.forEach(item => {
-                    const category = defaultDataPlastik.find(c => c.category === item.category);
-                    if (category) {
-                        category.items.push(item);
-                    } else {
-                        defaultDataPlastik.push({ category: item.category, items: [item] });
-                    }
-                });
-                loadTableFromHtmlPlastik();
-            };
-
-            request.onerror = function (event) {
-                console.error("Error loading data from IndexedDB:", event.target.error);
-            };
-        }
-
-        function loadDataFromDBKue() {
-            const transaction = dbKue.transaction([storeNameKue], "readonly");
-            const store = transaction.objectStore(storeNameKue);
-
-            const request = store.getAll();
-
-            request.onsuccess = function (event) {
-                const items = event.target.result;
-                items.forEach(item => {
-                    const category = defaultDataKue.find(c => c.category === item.category);
-                    if (category) {
-                        category.items.push(item);
-                    } else {
-                        defaultDataKue.push({ category: item.category, items: [item] });
-                    }
-                });
-                loadTableFromHtmlKue();
-            };
-
-            request.onerror = function (event) {
-                console.error("Error loading data from IndexedDB:", event.target.error);
-            };
-        }
-
-        // Data barang awal
-        const defaultDataPlastik = [
-            { category: 'PP Neo (0,3)', items: [] },
-            { category: 'PP Neo (0,5)', items: [] },
-            { category: 'PP STP (standing pouch)', items: [] },
-            { category: 'PP Wayang', items: [] },
-            { category: 'PP +', items: [] },
-            { category: 'PP +', items: [] },
-            { category: 'OPP', items: [] },
-            { category: 'PE Tomat', items: [] },
-            { category: 'PE Andalan', items: [] },
-            { category: 'PE Klip', items: [] },
-            { category: 'PE +', items: [] },
-            { category: 'PE +', items: [] },
-            { category: 'THINWALL', items: [] },
-            { category: 'CUP', items: [] },
-            { category: 'MIKA', items: [] },
-            { category: 'PIRING', items: [] },
-            { category: 'MANGKOK', items: [] },
-            { category: 'FOAM', items: [] },
-            { category: 'KERTAS', items: [] },
-            { category: 'TISU', items: [] },
-            { category: 'DUS', items: [] },
-            { category: 'RICEBOWL', items: [] },
-            { category: 'BUBBLE WRAP', items: [] }
-        ];
-
-        const defaultDataKue = [
-            { category: 'Tepung', items: [] },
-            { category: 'Mesis', items: [] },
-            { category: 'Selai', items: [] },
-            { category: 'Susu', items: [] },
-            { category: 'Gula', items: [] },
-            { category: 'Agar', items: [] },
-            { category: 'Puding', items: [] },
-            { category: 'Nutrijel', items: [] },
-            { category: 'Pewarna', items: [] },
-            { category: 'Minuman', items: [] },
-            { category: 'Margarine', items: [] },
-            { category: 'Coklat bubuk', items: [] },
-            { category: 'Chocolate chip', items: [] },
-            { category: 'Bahan pengemulsi', items: [] },
-            { category: 'Bahan pengemban', items: [] }
-        ];
-
-        // Fungsi untuk memuat data dari defaultData ke tabel
-        function loadTableFromHtmlPlastik() {
-            const tbody = document.querySelector("#dataTablePlastik tbody");
-            tbody.innerHTML = '';
-
-            defaultDataPlastik.forEach((category, categoryIndex) => {
-                const subTitleRow = document.createElement("tr");
-                subTitleRow.classList.add("bg-gray-100");
-                subTitleRow.innerHTML = `<td colspan="18" class="font-bold-block text-center">
-                            ${category.category}
-                          </td>`;
-                tbody.appendChild(subTitleRow);
-
-                category.items.forEach((item, itemIndex) => {
-                    const row = document.createElement("tr");
-                    row.classList.add("bg-white");
-                    row.dataset.category = categoryIndex;
-                    row.dataset.item = itemIndex;
-                    row.innerHTML = `
-                        <td>${item.NO}</td>
-                        <td>${item.BARANG}</td>
-                        <td>${item.KODE_TOKO}</td>
-                        <td>${item.KODE_GUDANG}</td>
-                        <td>${formatCurrency(item.HARGA["DUS/BALL"])}</td>
-                        <td>${formatCurrency(item.HARGA["1 PACK"])}</td>
-                        <td>${formatCurrency(item.HARGA["1 PCS"])}</td>
-                        <td>${formatCurrency(item.HARGA["1000 GRAM"])}</td>
-                        <td>${formatCurrency(item.HARGA["500 GRAM"])}</td>
-                        <td>${formatCurrency(item.HARGA["250 GRAM"])}</td>
-                        <td>${formatCurrency(item.HARGA["100 GRAM"])}</td>
-                        <td>${formatCurrency(item.HARGA["50 GRAM"])}</td>
-                        <td>${item.STOK.GUDANG}</td>
-                        <td>${item.STOK.TOKO}</td>
-                        <td>${formatDate(item.TANGGAL.MASUK)}</td>
-                        <td>${formatDate(item.TANGGAL.KELUAR)}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            });
-        }
-
-        function loadTableFromHtmlKue() {
-            const tbody = document.querySelector("#tableBody");
-            tbody.innerHTML = '';
-
-            defaultDataKue.forEach((category, categoryIndex) => {
-                const subTitleRow = document.createElement("tr");
-                subTitleRow.classList.add("bg-gray-100");
-                subTitleRow.innerHTML = `<td colspan="18" class="font-bold-block text-center">
-                            ${category.category}
-                          </td>`;
-                tbody.appendChild(subTitleRow);
-
-                category.items.forEach((item, itemIndex) => {
-                    const row = document.createElement("tr");
-                    row.classList.add("bg-white");
-                    row.dataset.category = categoryIndex;
-                    row.dataset.item = itemIndex;
-                    row.innerHTML = `
-                        <td>${item.NO}</td>
-                        <td>${item.BARANG}</td>
-                        <td>${item.KODE_TOKO}</td>
-                        <td>${item.KODE_GUDANG}</td>
-                        <td>${formatCurrency(item.HARGA["DUS / BALL"])}</td>
-                        <td>${formatCurrency(item.HARGA["1000 GRAM"])}</td>
-                        <td>${formatCurrency(item.HARGA["500 GRAM"])}</td>
-                        <td>${formatCurrency(item.HARGA["250 GRAM"])}</td>
-                        <td>${formatCurrency(item.HARGA["100 GRAM"])}</td>
-                        <td>${formatCurrency(item.HARGA["50 GRAM"])}</td>
-                        <td>${item.STOK.GUDANG}</td>
-                        <td>${item.STOK.TOKO}</td>
-                        <td>${formatDate(item.TANGGAL.EXPAYER)}</td>
-                        <td>${formatDate(item.TANGGAL.MASUK)}</td>
-                        <td>${formatDate(item.TANGGAL.KELUAR)}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            });
-        }
-
-        // Fungsi untuk format harga
-        function formatCurrency(value) {
-            if (value === undefined || value === null || value === '') {
-                return '—';
-            }
-            return new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                minimumFractionDigits: 2
-            }).format(value);
-        }
-
-        // Fungsi untuk format tanggal
-        function formatDate(dateString) {
-            if (!dateString) return '';
-            const date = new Date(dateString);
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
-        }
-
-        // Inisialisasi IndexedDB
-        openDBPlastik();
-        openDBKue();
-    </script>
-</body>
-</html>
+     .date-input {
+    background: transparent;
+    border: none; 
+    font-size: inherit; 
+    padding: 0;
+    width: 100%;
+	 color: black;
+    
+}  
+    .font-bold-block {
+        font-weight: 900;
+        font-size: 1.2rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
