@@ -289,6 +289,50 @@ const KueDB = {
         this.loadTableFromHtml();
     }
 };
+    function downloadTable() {
+    // Menyiapkan array untuk menampung data yang diubah
+    const modifiedData = [];
+
+    // Ambil semua baris data di tabel
+    const rows = document.querySelectorAll('#dataTablekue tbody tr');
+
+    // Loop melalui setiap baris untuk memeriksa perubahan
+    rows.forEach(row => {
+        // Pastikan data yang diubah (tanda dengan save-button yang muncul)
+        const saveButton = row.querySelector('.save-button');
+        if (saveButton && saveButton.style.display !== 'none') {
+            const cells = row.querySelectorAll('td');
+            const rowData = [];
+
+            // Ambil data dari setiap sel, kecuali nomor (kolom pertama)
+            for (let i = 1; i < cells.length - 2; i++) {
+                rowData.push(cells[i].textContent.trim());
+            }
+
+            // Masukkan data ke dalam array modifiedData
+            modifiedData.push(rowData);
+        }
+    });
+
+    // Jika tidak ada data yang diubah, hentikan proses
+    if (modifiedData.length === 0) {
+        alert("Tidak ada data yang diubah untuk diunduh.");
+        return;
+    }
+
+    // Konversi array data yang diubah menjadi format CSV atau lainnya
+    const csvContent = "data:text/csv;charset=utf-8,"
+        + modifiedData.map(row => row.join(",")).join("\n");
+
+    // Membuat link untuk mendownload file CSV
+    const encodedUri = encodeURI(csvContent);
+    const downloadLink = document.createElement("a");
+    downloadLink.setAttribute("href", encodedUri);
+    downloadLink.setAttribute("download", "data_terubah.csv");
+
+    // Klik link untuk mendownload file
+    downloadLink.click();
+}
 
 KueDB.openDB();
 </script>
