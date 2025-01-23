@@ -1,20 +1,9 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="table.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <style>
-        #downloadButton {
-            display: block;
-            margin: 20px auto;
-            text-align: center;
-            background-color: transparent;
-            color: #01dfff;
-            border: 2px solid #01dfff;
-            padding: 10px 20px;
-            font-size: 30px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+   
     </style>
 </head>
 <body>
@@ -40,7 +29,7 @@
                         <th class="harga" colspan="6">HARGA</th>
                         <th class="stok" colspan="2">STOK</th>
                         <th class="tanggal" colspan="3">TANGGAL</th>
-                        <th class="aksi" colspan="2">AKSI</th>
+                        <th class="aksi" colspan="2">AKSI</th> <!-- Kolom AKSI untuk SAVE dan HAPUS -->
                     </tr>
                     <tr>
                         <th class="kode-gudang">TOKO</th>
@@ -56,8 +45,8 @@
                         <th class="expayer">EXPAYER</th>
                         <th class="masuk">MASUK</th>
                         <th class="keluar">KELUAR</th>
-                        <th class="save">SAVE</th>
-                        <th class="hapus">HAPUS</th>
+                        <th class="save">SAVE</th> <!-- Kolom SAVE -->
+                        <th class="hapus">HAPUS</th> <!-- Kolom HAPUS -->
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -68,167 +57,194 @@
     <button id="downloadButton" onclick="downloadTable()">
         <i class="fas fa-download"></i>
     </button>
-    <script src="DW.js"></script>
-    <script>
-        const KueDB = {
-            dbName: "VIP",
-            storeName: "GRUP",
-            db: null,
-            defaultData: [
-                { category: 'Tepung', items: [] },
-                { category: 'Mesis', items: [] },
-                { category: 'Selai', items: [] },
-                { category: 'Susu', items: [] },
-                { category: 'Gula', items: [] },
-                { category: 'Agar', items: [] },
-                { category: 'Puding', items: [] },
-                { category: 'Nutrijel', items: [] },
-                { category: 'Pewarna', items: [] },
-                { category: 'Minuman', items: [] },
-                { category: 'Margarine', items: [] },
-                { category: 'Coklat bubuk', items: [] },
-                { category: 'Chocolate chip', items: [] },
-                { category: 'Bahan pengemulsi', items: [] },
-                { category: 'Bahan pengembang', items: [] }
-            ],
+ <script src="DW.js"></script>
+<script>
+const KueDB = {
+    dbName: "VIP",
+    storeName: "GRUP",
+    db: null,
+    defaultData: [
+        { category: 'Tepung', items: [] },
+        { category: 'Mesis', items: [] },
+        { category: 'Selai', items: [] },
+        { category: 'Susu', items: [] },
+        { category: 'Gula', items: [] },
+        { category: 'Agar', items: [] },
+        { category: 'Puding', items: [] },
+        { category: 'Nutrijel', items: [] },
+        { category: 'Pewarna', items: [] },
+        { category: 'Minuman', items: [] },
+        { category: 'Margarine', items: [] },
+        { category: 'Coklat bubuk', items: [] },
+        { category: 'Chocolate chip', items: [] },
+        { category: 'Bahan pengemulsi', items: [] },
+        { category: 'Bahan pengembang', items: [] }
+    ],
 
-            openDB: function () {
-                const request = indexedDB.open(this.dbName, 1);
-                request.onerror = function (event) {
-                    console.error("Database error: " + event.target.error);
-                };
-                request.onupgradeneeded = (event) => {
-                    this.db = event.target.result;
-                    if (!this.db.objectStoreNames.contains(this.storeName)) {
-                        const store = this.db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
-                        store.createIndex("by_category", "category", { unique: false });
-                    }
-                };
-                request.onsuccess = (event) => {
-                    this.db = event.target.result;
-                    this.loadDataFromDB();
-                };
-            },
+    openDB: function() {
+        const request = indexedDB.open(this.dbName, 1);
+        request.onerror = function(event) {
+            console.error("Database error: " + event.target.error);
+        };
+        request.onupgradeneeded = (event) => {
+            this.db = event.target.result;
+            if (!this.db.objectStoreNames.contains(this.storeName)) {
+                const store = this.db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                store.createIndex("by_category", "category", { unique: false });
+            }
+        };
+        request.onsuccess = (event) => {
+            this.db = event.target.result;
+            this.loadDataFromDB();
+        };
+    },
 
-            saveItemToDB: function (categoryIndex, itemIndex) {
-                const item = this.defaultData[categoryIndex].items[itemIndex];
-                const transaction = this.db.transaction([this.storeName], "readwrite");
-                const store = transaction.objectStore(this.storeName);
-                store.put(item);
+    saveItemToDB: function(categoryIndex, itemIndex) {
+        const item = this.defaultData[categoryIndex].items[itemIndex];
+        const transaction = this.db.transaction([this.storeName], "readwrite");
+        const store = transaction.objectStore(this.storeName);
+        store.put(item);
 
-                transaction.oncomplete = function () {
-                    console.log("Item saved to IndexedDB.");
-                };
+        transaction.oncomplete = function() {
+            console.log("Item saved to IndexedDB.");
+        };
 
-                transaction.onerror = function (event) {
-                    console.error("Error saving to IndexedDB:", event.target.error);
-                };
-            },
+        transaction.onerror = function(event) {
+            console.error("Error saving to IndexedDB:", event.target.error);
+        };
+    },
 
-            loadDataFromDB: function () {
-                const transaction = this.db.transaction([this.storeName], "readonly");
-                const store = transaction.objectStore(this.storeName);
-                const request = store.getAll();
+    loadDataFromDB: function() {
+        const transaction = this.db.transaction([this.storeName], "readonly");
+        const store = transaction.objectStore(this.storeName);
+        const request = store.getAll();
 
-                request.onsuccess = (event) => {
-                    const items = event.target.result;
-                    items.forEach(item => {
-                        const category = this.defaultData.find(c => c.category === item.category);
-                        if (category) {
-                            category.items.push(item);
-                        } else {
-                            this.defaultData.push({ category: item.category, items: [item] });
-                        }
-                    });
-                    this.loadTableFromHtml();
-                };
-
-                request.onerror = function (event) {
-                    console.error("Error loading data from IndexedDB:", event.target.error);
-                };
-            },
-
-            deleteItemFromDB: function (categoryIndex, itemIndex) {
-                const itemId = this.defaultData[categoryIndex].items[itemIndex].id;
-                const transaction = this.db.transaction([this.storeName], "readwrite");
-                const store = transaction.objectStore(this.storeName);
-                store.delete(itemId);
-
-                transaction.oncomplete = () => {
-                    console.log("Item deleted from IndexedDB.");
-                    this.loadDataFromDB();
-                };
-
-                transaction.onerror = function (event) {
-                    console.error("Error deleting from IndexedDB:", event.target.error);
-                };
-            },
-
-            saveItem: function (categoryIndex, itemIndex) {
-                const item = this.defaultData[categoryIndex].items[itemIndex];
-                const updatedCells = document.querySelectorAll(`[data-category="${categoryIndex}"][data-item="${itemIndex}"]`);
-
-                updatedCells.forEach(cell => {
-                    const columnName = cell.cellIndex;
-                    switch (columnName) {
-                        case 0: item.NO = cell.textContent; break;
-                        case 1: item.BARANG = cell.textContent; break;
-                        case 2: item.KODE_TOKO = cell.textContent; break;
-                        case 3: item.KODE_GUDANG = cell.textContent; break;
-                        case 4: item.HARGA["DUS / BALL"] = cell.textContent; break;
-                        case 5: item.HARGA["1000 GRAM"] = cell.textContent; break;
-                        case 6: item.HARGA["500 GRAM"] = cell.textContent; break;
-                        case 7: item.HARGA["250 GRAM"] = cell.textContent; break;
-                        case 8: item.HARGA["100 GRAM"] = cell.textContent; break;
-                        case 9: item.HARGA["50 GRAM"] = cell.textContent; break;
-                        case 10: item.STOK.GUDANG = cell.textContent; break;
-                        case 11: item.STOK.TOKO = cell.textContent; break;
-                    }
-                });
-                this.saveItemToDB(categoryIndex, itemIndex);
-
-                const saveButton = document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`);
-                if (saveButton) {
-                    saveButton.style.display = 'none';
+        request.onsuccess = (event) => {
+            const items = event.target.result;
+            items.forEach(item => {
+                const category = this.defaultData.find(c => c.category === item.category);
+                if (category) {
+                    category.items.push(item);
+                } else {
+                    this.defaultData.push({ category: item.category, items: [item] });
                 }
-            },
+            });
+            this.loadTableFromHtml();
+        };
 
-            deleteItem: function (categoryIndex, itemIndex) {
-                this.deleteItemFromDB(categoryIndex, itemIndex);
-                this.defaultData[categoryIndex].items.splice(itemIndex, 1);
-                this.loadTableFromHtml();
-            },
+        request.onerror = function(event) {
+            console.error("Error loading data from IndexedDB:", event.target.error);
+        };
+    },
 
-            updateDate: function (categoryIndex, itemIndex, dateType, value) {
-                const item = this.defaultData[categoryIndex].items[itemIndex];
-                item.TANGGAL[dateType] = value;
+    deleteItemFromDB: function(categoryIndex, itemIndex) {
+        const itemId = this.defaultData[categoryIndex].items[itemIndex].id;
+        const transaction = this.db.transaction([this.storeName], "readwrite");
+        const store = transaction.objectStore(this.storeName);
+        store.delete(itemId);
 
-                const saveButton = document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`);
-                if (saveButton) {
-                    saveButton.style.display = 'inline';
-                }
-            },
+        transaction.oncomplete = () => {
+            console.log("Item deleted from IndexedDB.");
+            this.loadDataFromDB();
+        };
 
-            loadTableFromHtml: function () {
-                const tbody = document.querySelector("#tableBody");
-                tbody.innerHTML = '';
+        transaction.onerror = function(event) {
+            console.error("Error deleting from IndexedDB:", event.target.error);
+        };
+    },
 
-                this.defaultData.forEach((category, categoryIndex) => {
-                    const subTitleRow = document.createElement("tr");
-                    subTitleRow.classList.add("sub-title");
-                    subTitleRow.innerHTML = `<td colspan="18">
+    saveItem: function(categoryIndex, itemIndex) {
+        const item = this.defaultData[categoryIndex].items[itemIndex];
+        const updatedCells = document.querySelectorAll(`[data-category="${categoryIndex}"][data-item="${itemIndex}"]`);
+
+        updatedCells.forEach(cell => {
+            const columnName = cell.cellIndex;
+            switch (columnName) {
+                case 0: item.NO = cell.textContent; break;
+                case 1: item.BARANG = cell.textContent; break;
+                case 2: item.KODE_TOKO = cell.textContent; break;
+                case 3: item.KODE_GUDANG = cell.textContent; break;
+                case 4: item.HARGA["DUS / BALL"] = cell.textContent; break;
+                case 5: item.HARGA["1000 GRAM"] = cell.textContent; break;
+                case 6: item.HARGA["500 GRAM"] = cell.textContent; break;
+                case 7: item.HARGA["250 GRAM"] = cell.textContent; break;
+                case 8: item.HARGA["100 GRAM"] = cell.textContent; break;
+                case 9: item.HARGA["50 GRAM"] = cell.textContent; break;
+                case 10: item.STOK.GUDANG = cell.textContent; break;
+                case 11: item.STOK.TOKO = cell.textContent; break;
+            }
+        });
+        this.saveItemToDB(categoryIndex, itemIndex);
+
+        // Sembunyikan tombol save setela
+        const saveButton = document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`);
+        if (saveButton) {
+            saveButton.style.display = 'none';
+        }
+    },
+
+    deleteItem: function(categoryIndex, itemIndex) {
+    const itemId = this.defaultData[categoryIndex].items[itemIndex].id;
+    const transaction = this.db.transaction([this.storeName], "readwrite");
+    const store = transaction.objectStore(this.storeName);
+    store.delete(itemId);
+
+    transaction.oncomplete = () => {
+        console.log("Item deleted from IndexedDB.");
+        // Hapus item dari array defaultData
+        this.defaultData[categoryIndex].items.splice(itemIndex, 1);
+
+        // Hapus baris langsung dari tabel HTML DOM
+        const row = document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"]`);
+        if (row) row.remove();
+
+        // Perbarui indeks data-item untuk item yang tersisa
+        const remainingRows = document.querySelectorAll(`[data-category="${categoryIndex}"]`);
+        remainingRows.forEach((row, index) => {
+            row.dataset.item = index;
+            const cells = row.querySelectorAll('[data-item]');
+            cells.forEach(cell => {
+                cell.dataset.item = index;
+            });
+        });
+    };
+
+    transaction.onerror = function(event) {
+        console.error("Error deleting from IndexedDB:", event.target.error);
+    };
+},
+
+    updateDate: function(categoryIndex, itemIndex, dateType, value) {
+        const item = this.defaultData[categoryIndex].items[itemIndex];
+        item.TANGGAL[dateType] = value;
+
+        // Tampilkan tombol save saat tanggal diubah
+        const saveButton = document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`);
+        if (saveButton) {
+            saveButton.style.display = 'inline'; // Tampilkan tombol save
+        }
+    },
+
+    loadTableFromHtml: function() {
+        const tbody = document.querySelector("#tableBody");
+        tbody.innerHTML = '';
+
+        this.defaultData.forEach((category, categoryIndex) => {
+            const subTitleRow = document.createElement("tr");
+            subTitleRow.classList.add("sub-title");
+            subTitleRow.innerHTML = `<td colspan="18">
                                         ${category.category}
                                         <button onclick="KueDB.addItem(${categoryIndex})">➕</button>
                                       </td>`;
-                    tbody.appendChild(subTitleRow);
+            tbody.appendChild(subTitleRow);
 
-                    category.items.forEach((item, itemIndex) => {
-                        const row = document.createElement("tr");
-                        row.classList.add("data-row");
-                        row.dataset.category = categoryIndex;
-                        row.dataset.item = itemIndex;
-                        const today = new Date().toISOString().split('T')[0];
-                        row.innerHTML = `
+            category.items.forEach((item, itemIndex) => {
+                const row = document.createElement("tr");
+                row.classList.add("data-row");
+                row.dataset.category = categoryIndex;
+                row.dataset.item = itemIndex;
+                const today = new Date().toISOString().split('T')[0]; // Mendapatkan tanggal saat ini dalam format YYYY-MM-DD
+                row.innerHTML = `
                     <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.NO}</td>
                     <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.BARANG}</td>
                     <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.KODE_TOKO}</td>
@@ -254,46 +270,41 @@
                             oninput="KueDB.updateDate(${categoryIndex}, ${itemIndex}, 'KELUAR', this.value)">
                     </td>
                     <td>
-                        <button class="save-button" onclick="KueDB.saveItem(${categoryIndex}, ${itemIndex})">💾</button>
+                        <button class="save-button" onclick="KueDB.saveItem(${categoryIndex}, ${itemIndex})" style="display:none;">&#9729;</button>
                     </td>
-                    <td>
-                        <button class="delete-button" onclick="KueDB.deleteItem(${categoryIndex}, ${itemIndex})">🗑</button>
-                    </td>
-                  `;
-                        tbody.appendChild(row);
+                    <td><button class="delete-button" onclick="KueDB.deleteItem(${categoryIndex}, ${itemIndex})">&#128465;</button></td>
+                `;
+                tbody.appendChild(row);
+
+                // Menambahkan event listener untuk menampilkan tombol save
+                const editableCells = row.querySelectorAll('[contenteditable="true"]');
+                editableCells.forEach(cell => {
+                    cell.addEventListener('input', () => {
+                        const saveButton = row.querySelector('.save-button');
+                        saveButton.style.display = 'inline'; // Tampilkan tombol save
                     });
                 });
-            },
+            });
+        });
+    },
 
-            addItem: function (categoryIndex) {
-                const newItem = {
-                    NO: '',
-                    BARANG: '',
-                    KODE_TOKO: '',
-                    KODE_GUDANG: '',
-                    HARGA: {
-                        "DUS / BALL": '',
-                        "1000 GRAM": '',
-                        "500 GRAM": '',
-                        "250 GRAM": '',
-                        "100 GRAM": '',
-                        "50 GRAM": '',
-                    },
-                    STOK: {
-                        GUDANG: '',
-                        TOKO: '',
-                    },
-                    TANGGAL: {
-                        EXPAYER: '',
-                        MASUK: '',
-                        KELUAR: '',
-                    }
-                };
-                this.defaultData[categoryIndex].items.push(newItem);
-                this.loadTableFromHtml();
-            },
+    addItem: function(categoryIndex) {
+        const category = this.defaultData[categoryIndex];
+        const newItem = {
+            NO: category.items.length + 1,
+            BARANG: '',
+            KODE_TOKO: '',
+            KODE_GUDANG: '',
+            HARGA: { "DUS / BALL": '', "1000 GRAM": '', "500 GRAM": '', "250 GRAM": '', "100 GRAM": '', "50 GRAM": '' },
+            STOK: { GUDANG: '', TOKO: '' },
+            TANGGAL: { EXPAYER: '', MASUK: '', KELUAR: '' },
+            category: category.category
         };
+        category.items.push(newItem);
+        this.loadTableFromHtml();
+    }
+};
 
-        KueDB.openDB();
-    </script>
+KueDB.openDB();
+</script>
 </body>
