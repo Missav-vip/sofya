@@ -149,7 +149,7 @@ const KueDB = {
             subTitleRow.classList.add("sub-title");
             subTitleRow.innerHTML = `<td colspan="18">
                                         ${category.category}
-                                        <button onclick="KueDB.addItem(${categoryIndex})">+</button>
+                                        <button onclick="KueDB.addItem(${categoryIndex})">➕</button>
                                       </td>`;
             tbody.appendChild(subTitleRow);
 
