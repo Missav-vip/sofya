@@ -248,21 +248,21 @@ function loadTableFromHtmlPlastik() {
             row.dataset.item = itemIndex;
             row.innerHTML = `
                 <td>${item.NO}</td>
-                <td contenteditable="true">${item.BARANG}</td>
-                <td contenteditable="true">${item.KODE_TOKO}</td>
-                <td contenteditable="true">${item.KODE_GUDANG}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["DUS/BALL"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["1 PACK"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["1 PCS"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["1000 GRAM"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["500 GRAM"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["250 GRAM"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["100 GRAM"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["50 GRAM"])}</td>
-                <td contenteditable="true">${item.STOK.GUDANG}</td>
-                <td contenteditable="true">${item.STOK.TOKO}</td>
-                <td contenteditable="true">${formatDate(item.TANGGAL.MASUK)}</td>
-                <td contenteditable="true">${formatDate(item.TANGGAL.KELUAR)}</td>
+                <td>${item.BARANG}</td>
+                <td>${item.KODE_TOKO}</td>
+                <td>${item.KODE_GUDANG}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', 'DUS/BALL', this.innerText)">${formatCurrency(item.HARGA["DUS/BALL"])}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '1 PACK', this.innerText)">${formatCurrency(item.HARGA["1 PACK"])}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '1 PCS', this.innerText)">${formatCurrency(item.HARGA["1 PCS"])}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '1000 GRAM', this.innerText)">${formatCurrency(item.HARGA["1000 GRAM"])}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '500 GRAM', this.innerText)">${formatCurrency(item.HARGA["500 GRAM"])}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '250 GRAM', this.innerText)">${formatCurrency(item.HARGA["250 GRAM"])}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '100 GRAM', this.innerText)">${formatCurrency(item.HARGA["100 GRAM"])}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'HARGA', '50 GRAM', this.innerText)">${formatCurrency(item.HARGA["50 GRAM"])}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'STOK', 'GUDANG', this.innerText)">${item.STOK.GUDANG}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'STOK', 'TOKO', this.innerText)">${item.STOK.TOKO}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'TANGGAL', 'MASUK', this.innerText)">${formatDate(item.TANGGAL.MASUK)}</td>
+                <td contenteditable="true" onblur="updateItemPlastik(${categoryIndex}, ${itemIndex}, 'TANGGAL', 'KELUAR', this.innerText)">${formatDate(item.TANGGAL.KELUAR)}</td>
             `;
             tbody.appendChild(row);
         });
@@ -288,20 +288,20 @@ function loadTableFromHtmlKue() {
             row.dataset.item = itemIndex;
             row.innerHTML = `
                 <td>${item.NO}</td>
-                <td contenteditable="true">${item.BARANG}</td>
-                <td contenteditable="true">${item.KODE_TOKO}</td>
-                <td contenteditable="true">${item.KODE_GUDANG}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["DUS / BALL"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["1000 GRAM"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["500 GRAM"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["250 GRAM"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["100 GRAM"])}</td>
-                <td contenteditable="true">${formatCurrency(item.HARGA["50 GRAM"])}</td>
-                <td contenteditable="true">${item.STOK.GUDANG}</td>
-                <td contenteditable="true">${item.STOK.TOKO}</td>
-                <td contenteditable="true">${formatDate(item.TANGGAL.EXPAYER)}</td>
-                <td contenteditable="true">${formatDate(item.TANGGAL.MASUK)}</td>
-                <td contenteditable="true">${formatDate(item.TANGGAL.KELUAR)}</td>
+                <td>${item.BARANG}</td>
+                <td>${item.KODE_TOKO}</td>
+                <td>${item.KODE_GUDANG}</td>
+                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', 'DUS / BALL', this.innerText)">${formatCurrency(item.HARGA["DUS / BALL"])}</td>
+                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', '1000 GRAM', this.innerText)">${formatCurrency(item.HARGA["1000 GRAM"])}</td>
+                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', '500 GRAM', this.innerText)">${formatCurrency(item.HARGA["500 GRAM"])}</td>
+                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', '250 GRAM', this.innerText)">${formatCurrency(item.HARGA["250 GRAM"])}</td>
+                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', '100 GRAM', this.innerText)">${formatCurrency(item.HARGA["100 GRAM"])}</td>
+                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'HARGA', '50 GRAM', this.innerText)">${formatCurrency(item.HARGA["50 GRAM"])}</td>
+                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'STOK', 'GUDANG', this.innerText)">${item.STOK.GUDANG}</td>
+                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'STOK', 'TOKO', this.innerText)">${item.STOK.TOKO}</td>
+                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'TANGGAL', 'EXPAYER', this.innerText)">${formatDate(item.TANGGAL.EXPAYER)}</td>
+                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'TANGGAL', 'MASUK', this.innerText)">${formatDate(item.TANGGAL.MASUK)}</td>
+                <td contenteditable="true" onblur="updateItemKue(${categoryIndex}, ${itemIndex}, 'TANGGAL', 'KELUAR', this.innerText)">${formatDate(item.TANGGAL.KELUAR)}</td>
             `;
             tbody.appendChild(row);
         });
@@ -354,7 +354,11 @@ function downloadDataKue() {
     URL.revokeObjectURL(url);
 }
 
-// Inisialisasi IndexedDB
-openDBPlastik();
-openDBKue();
-</script>
+// Fungsi untuk memperbarui item Plastik di IndexedDB
+function updateItemPlastik(categoryIndex, itemIndex, field, subfield, value) {
+    const transaction = dbPlastik.transaction([storeNamePlastik], "readwrite");
+    const store = transaction.objectStore(storeNamePlastik);
+    const item = defaultDataPlastik[categoryIndex].items[itemIndex];
+
+    if (subfield) {
+        item[field][subfield] = parseFloat(value.replace(/[^0-9.-]+/
