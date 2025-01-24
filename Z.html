@@ -65,12 +65,12 @@
         });
 
         function uploadData(jsonData) {
-            const request = indexedDB.open("VIP", 1);
+            const request = indexedDB.open("cck", 1);
 
             request.onsuccess = function(event) {
                 const db = event.target.result;
-                const transaction = db.transaction(["GRUP"], "readwrite");
-                const store = transaction.objectStore("GRUP");
+                const transaction = db.transaction(["ce"], "readwrite");
+                const store = transaction.objectStore("ce");
 
                 // Tambahkan data dari JSON ke IndexedDB
                 jsonData.forEach((item) => {
