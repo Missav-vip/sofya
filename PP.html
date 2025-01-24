@@ -1,0 +1,323 @@
+
+<head>
+<meta charset="UTF-8">
+    <link rel="stylesheet" href="table.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+<script>
+   .save-button, .delete-button {
+        font-size: 20px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .save-button:hover, .delete-button:hover {
+        transform: scale(1.2);
+    }
+</script>
+</head>
+<body>
+<div id="search-container">
+    <div class="search-container">
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari data di tabel...">
+    </div>
+</div>  
+
+<div id="mainContent">
+    <h1>PLASTIK</h1>
+    <div class="table-container" id="tablePlastik">
+        <table id="dataTablePlastik" class="table-plastik">
+            <thead>
+                <tr>
+                    <th class="no-column" rowspan="3">NO</th>
+                    <th class="detail-barang" colspan="3">DETAIL BARANG</th>
+                    <th class="analisis-pasar" colspan="14">ANALISIS PASAR</th>
+                </tr>
+                <tr>
+                    <th class="jenis-barang" rowspan="2">UKURAN</th>
+                    <th class="kode" colspan="2">KODE</th>
+                    <th class="harga" colspan="8">HARGA</th>
+                    <th class="stok" colspan="2">STOK</th>
+                    <th class="tanggal" colspan="2">TANGGAL</th>
+<th class="aksi" colspan="2">AKSI</th> 
+                </tr>
+                <tr>
+                    <th class="kode-gudang">TOKO</th>
+                    <th class="kode-gudang">GUDANG</th>
+                    <th class="dus">DUS/BALL</th>
+                    <th class="pack">1 PACK</th>
+                    <th class="pcs">1 PCS</th>
+                    <th class="gram-1000">1000 GRAM</th>
+                    <th class="gram-500">500 GRAM</th>
+                    <th class="gram-250">250 GRAM</th>
+                    <th class="gram-100">100 GRAM</th>
+                    <th class="gram-50">50 GRAM</th>
+                    <th class="gudang">GUDANG</th>
+                    <th class="toko">TOKO</th>
+                    <th class="masuk">MASUK</th>
+                    <th class="keluar">KELUAR</th>
+<th class="save">SAVE</th> 
+                        <th class="hapus">HAPUS</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+<button id="downloadButton" onclick="downloadTable()">
+        <i class="fas fa-crown"></i>
+    </button>   
+</div>
+<script src="lello.js"></script>
+<script>
+
+const PlastikDB = {
+    dbName: "xxx",
+    storeName: "items",
+    db: null,
+    defaultData: [
+        { category: 'PP Neo (0,3)', items: [] },
+        { category: 'PP Neo (0,5)', items: [] },
+        { category: 'PP STP (standing pouch)', items: [] },
+        { category: 'PP Wayang', items: [] },
+        { category: 'PP +', items: [] },
+        { category: 'PP +', items: [] },
+        { category: 'OPP', items: [] },
+        { category: 'PE Tomat', items: [] },
+        { category: 'PE Andalan', items: [] },
+        { category: 'PE Klip', items: [] },
+        { category: 'PE +', items: [] },
+        { category: 'PE +', items: [] },
+        { category: 'THINWALL', items: [] },
+        { category: 'CUP', items: [] },
+        { category: 'MIKA', items: [] },
+        { category: 'PIRING', items: [] },
+        { category: 'MANGKOK', items: [] },
+        { category: 'FOAM', items: [] },
+        { category: 'KERTAS', items: [] },
+        { category: 'TISU', items: [] },
+        { category: 'DUS', items: [] },
+        { category: 'RICEBOWL', items: [] },
+        { category: 'BUBBLE WRAP', items: [] }
+    ],
+
+    openDB: function() {
+        const request = indexedDB.open(this.dbName, 1);
+        request.onerror = function(event) {
+            console.error("Database error: " + event.target.error);
+        };
+        request.onupgradeneeded = (event) => {
+            this.db = event.target.result;
+            if (!this.db.objectStoreNames.contains(this.storeName)) {
+                const store = this.db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                store.createIndex("by_category", "category", { unique: false });
+            }
+        };
+        request.onsuccess = (event) => {
+            this.db = event.target.result;
+            this.loadDataFromDB();
+        };
+    },
+
+    saveItemToDB: function(categoryIndex, itemIndex) {
+        const item = this.defaultData[categoryIndex].items[itemIndex];
+        const transaction = this.db.transaction([this.storeName], "readwrite");
+        const store = transaction.objectStore(this.storeName);
+        store.put(item);
+
+        transaction.oncomplete = function() {
+            console.log("Item saved to IndexedDB.");
+        };
+
+        transaction.onerror = function(event) {
+            console.error("Error saving to IndexedDB:", event.target.error);
+        };
+    },
+
+    loadDataFromDB: function() {
+        const transaction = this.db.transaction([this.storeName], "readonly");
+        const store = transaction.objectStore(this.storeName);
+        const request = store.getAll();
+
+        request.onsuccess = (event) => {
+            const items = event.target.result;
+            items.forEach(item => {
+                const category = this.defaultData.find(c => c.category === item.category);
+                if (category) {
+                    category.items.push(item);
+                } else {
+                    this.defaultData.push({ category: item.category, items: [item] });
+                }
+            });
+            this.loadTableFromHtml();
+        };
+
+        request.onerror = function(event) {
+            console.error("Error loading data from IndexedDB:", event.target.error);
+        };
+    },
+
+    deleteItemFromDB: function(categoryIndex, itemIndex) {
+        const itemId = this.defaultData[categoryIndex].items[itemIndex].id;
+        const transaction = this.db.transaction([this.storeName], "readwrite");
+        const store = transaction.objectStore(this.storeName);
+        store.delete(itemId);
+
+        transaction.oncomplete = () => {
+            console.log("Item deleted from IndexedDB.");
+            this.loadDataFromDB();
+        };
+
+        transaction.onerror = function(event) {
+            console.error("Error deleting from IndexedDB:", event.target.error);
+        };
+    },
+
+    saveItem: function(categoryIndex, itemIndex) {
+        const item = this.defaultData[categoryIndex].items[itemIndex];
+        const updatedCells = document.querySelectorAll(`[data-category="${categoryIndex}"][data-item="${itemIndex}"]`);
+
+        updatedCells.forEach(cell => {
+            const columnName = cell.cellIndex;
+            switch (columnName) {
+                case 0: item.NO = cell.textContent; break;
+                case 1: item.BARANG = cell.textContent; break;
+                case 2: item.KODE_TOKO = cell.textContent; break;
+                case 3: item.KODE_GUDANG = cell.textContent; break;
+                case 4: item.HARGA["DUS/BALL"] = cell.textContent; break;
+                case 5: item.HARGA["1 PACK"] = cell.textContent; break;
+                case 6: item.HARGA["1 PCS"] = cell.textContent; break;
+                case 7: item.HARGA["1000 GRAM"] = cell.textContent; break;
+                case 8: item.HARGA["500 GRAM"] = cell.textContent; break;
+                case 9: item.HARGA["250 GRAM"] = cell.textContent; break;
+                case 10: item.HARGA["100 GRAM"] = cell.textContent; break;
+                case 11: item.HARGA["50 GRAM"] = cell.textContent; break;
+                case 12: item.STOK.GUDANG = cell.textContent; break;
+                case 13: item.STOK.TOKO = cell.textContent; break;
+            }
+        });
+        this.saveItemToDB(categoryIndex, itemIndex);
+
+        // Sembunyikan tombol save setelah menyimpan
+        const saveButton = document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`);
+        if (saveButton) {
+            saveButton.style.display = 'none';
+        }
+    },
+
+    deleteItem: function(categoryIndex, itemIndex) {
+        this.deleteItemFromDB(categoryIndex, itemIndex);
+        this.defaultData[categoryIndex].items.splice(itemIndex, 1);
+        this.loadTableFromHtml();
+    },
+
+    updateDate: function(categoryIndex, itemIndex, dateType, value) {
+        const item = this.defaultData[categoryIndex].items[itemIndex];
+        item.TANGGAL[dateType] = value;
+
+        // Tampilkan tombol save saat tanggal diubah
+        const saveButton = document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`);
+        if (saveButton) {
+            saveButton.style.display = 'inline'; // Tampilkan tombol save
+        }
+    },
+
+    loadTableFromHtml: function() {
+        const tbody = document.querySelector("#dataTablePlastik tbody");
+        tbody.innerHTML = '';
+
+        this.defaultData.forEach((category, categoryIndex) => {
+            const subTitleRow = document.createElement("tr");
+            subTitleRow.classList.add("sub-title");
+            subTitleRow.innerHTML = `<td colspan="18">
+                                        ${category.category}
+                                        <button onclick="PlastikDB.addItem(${categoryIndex})">➕</button>
+                                      </td>`;
+            tbody.appendChild(subTitleRow);
+
+            category.items.forEach((item, itemIndex) => {
+                const row = document.createElement("tr");
+                row.classList.add("data-row");
+                row.dataset.category = categoryIndex;
+                row.dataset.item = itemIndex;
+                const today = new Date().toISOString().split('T')[0]; // Mendapatkan tanggal saat ini dalam format YYYY-MM-DD
+                row.innerHTML = `
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.NO}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.BARANG}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.KODE_TOKO}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.KODE_GUDANG}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["DUS/BALL"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["1 PACK"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["1 PCS"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["1000 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["500 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["250 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["100 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.HARGA["50 GRAM"]}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.STOK.GUDANG}</td>
+                    <td contenteditable="true" data-category="${categoryIndex}" data-item="${itemIndex}">${item.STOK.TOKO}</td>
+                    <td>
+                        <input type="date" class="date-input" value="${item.TANGGAL.MASUK || today}" 
+                            oninput="PlastikDB.updateDate(${categoryIndex}, ${itemIndex}, 'MASUK', this.value)">
+                    </td>
+                    <td>
+                        <input type="date" class="date-input" value="${item.TANGGAL.KELUAR || today}" 
+                            oninput="PlastikDB.updateDate(${categoryIndex}, ${itemIndex}, 'KELUAR', this.value)">
+                    </td>
+                    <td>
+                        <button class="save-button" onclick="PlastikDB.saveItem(${categoryIndex}, ${itemIndex})" style="display:none;">&#9729;</button>
+                    </td>
+                    <td><button class="delete-button" onclick="PlastikDB.deleteItem(${categoryIndex}, ${itemIndex})">&#128465;</button></td>
+                `;
+                tbody.appendChild(row);
+
+                // Menambahkan event listener untuk menampilkan tombol save
+                const editableCells = row.querySelectorAll('[contenteditable="true"]');
+                editableCells.forEach(cell => {
+                    cell.addEventListener('input', () => {
+                        const saveButton = row.querySelector('.save-button');
+                        saveButton.style.display = 'inline'; // Tampilkan tombol save
+                    });
+                });
+            });
+        });
+    },
+
+    addItem: function(categoryIndex) {
+        const category = this.defaultData[categoryIndex];
+        const newItem = {
+            NO: category.items.length + 1,
+            BARANG: '',
+            KODE_TOKO: '',
+            KODE_GUDANG: '',
+            HARGA: { "DUS/BALL": '', "1 PACK": '', "1 PCS": '', "1000 GRAM": '', "500 GRAM": '', "250 GRAM": '', "100 GRAM": '', "50 GRAM": '' },
+            STOK: { GUDANG: '', TOKO: '' },
+            TANGGAL: { EXPAYER: '', MASUK: '', KELUAR: '' },
+            category: category.category
+        };
+        category.items.push(newItem);
+        this.loadTableFromHtml();
+    }
+};
+
+function downloadTable() {
+    const jsonData = PlastikDB.defaultData;
+    const dataStr = JSON.stringify(jsonData, null, 4);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const downloadLink = document.createElement("a");
+    downloadLink.href = url;
+    downloadLink.download = "Asoi.json";
+    downloadLink.click();
+
+    URL.revokeObjectURL(url);
+}
+
+document.getElementById("downloadButton").addEventListener("click", downloadTable);
+
+// Memanggil fungsi untuk membuka database
+
+PlastikDB.openDB();
+</script>
