@@ -1,48 +1,47 @@
 function downloadTable() {
-    const tableData = PlastikDB.defaultData.map(category => {
-        return {
-            category: category.category,
-            items: category.items.map(item => ({
-                NO: item.NO || "",
-                BARANG: item.BARANG || "",
-                KODE_TOKO: item.KODE_TOKO || "",
-                KODE_GUDANG: item.KODE_GUDANG || "",
-                HARGA: {
-                    "DUS/BALL": item.HARGA["DUS/BALL"] || "",
-                    "1 PACK": item.HARGA["1 PACK"] || "",
-                    "1 PCS": item.HARGA["1 PCS"] || "",
-                    "1000 GRAM": item.HARGA["1000 GRAM"] || "",
-                    "500 GRAM": item.HARGA["500 GRAM"] || "",
-                    "250 GRAM": item.HARGA["250 GRAM"] || "",
-                    "100 GRAM": item.HARGA["100 GRAM"] || "",
-                    "50 GRAM": item.HARGA["50 GRAM"] || ""
-                },
-                STOK: {
-                    GUDANG: item.STOK.GUDANG || "",
-                    TOKO: item.STOK.TOKO || ""
-                },
-                TANGGAL: {
-                    MASUK: item.TANGGAL.MASUK || "",
-                    KELUAR: item.TANGGAL.KELUAR || ""
-                }
-            }))
+    // Buka database IndexedDB
+    const request = indexedDB.open(PlastikDB.dbName, 1);
+    request.onsuccess = function (event) {
+        const db = event.target.result;
+        const transaction = db.transaction([PlastikDB.storeName], "readonly");
+        const store = transaction.objectStore(PlastikDB.storeName);
+
+        // Ambil semua data dari database
+        const getAllRequest = store.getAll();
+        getAllRequest.onsuccess = function (event) {
+            const data = event.target.result;
+
+            // Format data hanya untuk bagian barang hingga tanggal
+            const formattedData = data.map((item) => ({
+                category: item.category,
+                NO: item.NO,
+                BARANG: item.BARANG,
+                KODE_TOKO: item.KODE_TOKO,
+                KODE_GUDANG: item.KODE_GUDANG,
+                HARGA: item.HARGA,
+                STOK: item.STOK,
+                TANGGAL: item.TANGGAL,
+            }));
+
+            // Konversi data menjadi JSON string
+            const jsonString = JSON.stringify(formattedData, null, 2);
+
+            // Buat file JSON dan unduh
+            const blob = new Blob([jsonString], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "asoy.json"; // Nama file yang diunduh
+            a.click();
+            URL.revokeObjectURL(url);
         };
-    });
 
-    // Convert data to JSON
-    const jsonString = JSON.stringify(tableData, null, 4);
+        getAllRequest.onerror = function (event) {
+            console.error("Error reading data from IndexedDB:", event.target.error);
+        };
+    };
 
-    // Create a Blob from the JSON data
-    const blob = new Blob([jsonString], { type: "application/json" });
-
-    // Create a download link
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "PlastikData.json";
-
-    // Trigger the download
-    link.click();
-
-    // Clean up the URL object
-    URL.revokeObjectURL(link.href);
+    request.onerror = function (event) {
+        console.error("Database error:", event.target.error);
+    };
 }
