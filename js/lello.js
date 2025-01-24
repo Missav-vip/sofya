@@ -77,21 +77,27 @@ const KueDB = {
         };
     },
 
-    deleteItemFromDB: function(categoryIndex, itemIndex) {
-        const itemId = this.defaultData[categoryIndex].items[itemIndex].id;
-        const transaction = this.db.transaction([this.storeName], "readwrite");
-        const store = transaction.objectStore(this.storeName);
-        store.delete(itemId);
+    deleteItem: function(categoryIndex, itemIndex) {
+    this.deleteItemFromDB(categoryIndex, itemIndex);
+    this.defaultData[categoryIndex].items.splice(itemIndex, 1);
+    this.loadTableFromHtml();
+},
 
-        transaction.oncomplete = () => {
-            console.log("Item deleted from IndexedDB.");
-            this.loadDataFromDB();
-        };
+deleteItemFromDB: function(categoryIndex, itemIndex) {
+    const item = this.defaultData[categoryIndex].items[itemIndex];
+    const transaction = this.db.transaction([this.storeName], "readwrite");
+    const store = transaction.objectStore(this.storeName);
+    
+    const request = store.delete(item.id);
 
-        transaction.onerror = function(event) {
-            console.error("Error deleting from IndexedDB:", event.target.error);
-        };
-    },
+    request.onsuccess = () => {
+        console.log(`Item dengan ID ${item.id} berhasil dihapus dari IndexedDB.`);
+    };
+
+    request.onerror = (event) => {
+        console.error("Error saat menghapus item dari IndexedDB:", event.target.error);
+    };
+}
 
     saveItem: function(categoryIndex, itemIndex) {
         const item = this.defaultData[categoryIndex].items[itemIndex];
@@ -307,22 +313,27 @@ const PlastikDB = {
         };
     },
 
-    deleteItemFromDB: function(categoryIndex, itemIndex) {
-        const itemId = this.defaultData[categoryIndex].items[itemIndex].id;
-        const transaction = this.db.transaction([this.storeName], "readwrite");
-        const store = transaction.objectStore(this.storeName);
-        store.delete(itemId);
+    deleteItem: function(categoryIndex, itemIndex) {
+    this.deleteItemFromDB(categoryIndex, itemIndex);
+    this.defaultData[categoryIndex].items.splice(itemIndex, 1);
+    this.loadTableFromHtml();
+},
 
-        transaction.oncomplete = () => {
-            console.log("Item deleted from IndexedDB.");
-            this.loadDataFromDB();
-        };
+deleteItemFromDB: function(categoryIndex, itemIndex) {
+    const item = this.defaultData[categoryIndex].items[itemIndex];
+    const transaction = this.db.transaction([this.storeName], "readwrite");
+    const store = transaction.objectStore(this.storeName);
+    
+    const request = store.delete(item.id);
 
-        transaction.onerror = function(event) {
-            console.error("Error deleting from IndexedDB:", event.target.error);
-        };
-    },
+    request.onsuccess = () => {
+        console.log(`Item dengan ID ${item.id} berhasil dihapus dari IndexedDB.`);
+    };
 
+    request.onerror = (event) => {
+        console.error("Error saat menghapus item dari IndexedDB:", event.target.error);
+    };
+}
     saveItem: function(categoryIndex, itemIndex) {
         const item = this.defaultData[categoryIndex].items[itemIndex];
         const updatedCells = document.querySelectorAll(`[data-category="${categoryIndex}"][data-item="${itemIndex}"]`);
