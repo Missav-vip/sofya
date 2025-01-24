@@ -1,8 +1,9 @@
 function downloadTable() {
-    const data = PlastikDB.defaultData.map(category => {
+    const tableData = PlastikDB.defaultData.map(category => {
         return {
             category: category.category,
             items: category.items.map(item => ({
+                NO: item.NO || "",
                 BARANG: item.BARANG || "",
                 KODE_TOKO: item.KODE_TOKO || "",
                 KODE_GUDANG: item.KODE_GUDANG || "",
@@ -28,19 +29,20 @@ function downloadTable() {
         };
     });
 
-    // Konversi data ke JSON string
-    const jsonString = JSON.stringify(data, null, 2);
+    // Convert data to JSON
+    const jsonString = JSON.stringify(tableData, null, 4);
 
-    // Membuat Blob dan URL untuk file JSON
+    // Create a Blob from the JSON data
     const blob = new Blob([jsonString], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
 
-    // Membuat elemen anchor untuk mendownload file
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "DataPlastik.json"; // Nama file JSON
-    a.click();
+    // Create a download link
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "PlastikData.json";
 
-    // Membersihkan URL objek
-    URL.revokeObjectURL(url);
+    // Trigger the download
+    link.click();
+
+    // Clean up the URL object
+    URL.revokeObjectURL(link.href);
 }
