@@ -1,7 +1,124 @@
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="x.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1, .search-container {
+            text-align: center;
+            color: black;
+        }
+
+        .search-container {
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: transparent;
+        }
+
+        .search-container input {
+            padding: 20px;
+            width: 90%;
+            height: 60px;
+            border-radius: 30px;
+            border: 3px solid #444;
+            background: #01dfff;
+            box-shadow: 8px 8px 15px #44dede, -8px -8px 15px #58ffff;
+            transition: all 0.3s ease-in-out;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+        }
+
+        .search-container input:focus {
+            box-shadow: inset 8px 8px 15px #ffffff, inset -8px -8px 15px #ffffff, 
+                        8px 8px 15px #44dede, -8px -8px 15px #58ffff;
+            outline: none;
+            border: 3px solid #333;
+        }
+
+        /* Adjust main content to sit below the search container */
+        #mainContent {
+            margin-top: 100px; /* Height of the search-container + some space */
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: black;
+            background: white;
+            border: 2px solid black;
+        }
+
+        table th, table td {
+            border: 2px solid black;
+        }
+
+        table th {
+            border: 2px solid white;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+        }
+
+        table td {
+            font-size: 20px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        th, td {
+            border: 2px solid white;
+            padding: 10px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        th {
+            background: black;
+            color: white;
+            font-weight: bold;
+            font-size: 25px;
+        }
+
+        .table-plastik th {
+            background: black;
+        }
+
+        .download-container {
+            text-align: center;
+            margin: 20px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 10px 0;
+            z-index: 1000;
+            background: transparent;
+        }
+
+        .download-container button {
+            display: inline-block;
+            margin: 0 3px;
+            text-align: center;
+            background-color: transparent;
+            color: #01dfff;
+            border: 2px solid #01dfff;
+            padding: 10px 20px;
+            font-size: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <!-- Search Container -->
@@ -55,179 +172,31 @@
         </div>   
     </div>
 
-    <div class="download-container">
-        <!-- Tombol Pertama -->
-        <button class="download-button" onclick="downloadTable()">
-            <i class="fas fa-download"></i>
-        </button>
-        <!-- Tombol Kedua -->
-        <button class="download-button" onclick="uploadTable()">
-            <i class="fas fa-upload"></i>
-        </button>
-    </div>
+   <div class="download-container">
+    <!-- Tombol Pertama untuk Download -->
+    <button class="download-button" onclick="downloadTable()">
+        <i class="fas fa-download"></i>
+    </button>
+    <!-- Tombol Kedua untuk Apload -->
+    <button class="download-button" onclick="triggerUpdateFile()">
+        <i class="fas fa-upload"></i>
+    </button>
+</div>
 
-    <!-- External Scripts -->
-    <script src="DW.js"></script>
-    <script src="x.js"></script>
+<!-- External Scripts -->
+<script src="DW.js"></script>
+<script src="z.js"></script>
 
-    <script>
-        const PlastikDB = {
-            dbName: "pp",
-            storeName: "x",
-            db: null,
-            defaultData: [
-                'PP Neo (0,3)', 'PP Neo (0,5)', 'PP STP (standing pouch)', 'PP Wayang', 'PP +', 'OPP',
-                'PE Tomat', 'PE Andalan', 'PE Klip', 'THINWALL', 'CUP', 'MIKA', 'PIRING', 'MANGKOK',
-                'FOAM', 'KERTAS', 'TISU', 'DUS', 'RICEBOWL', 'BUBBLE WRAP'
-            ].map(category => ({ category, items: [] })),
-
-            openDB() {
-                const request = indexedDB.open(this.dbName, 1);
-                request.onupgradeneeded = e => {
-                    this.db = e.target.result;
-                    if (!this.db.objectStoreNames.contains(this.storeName)) {
-                        const store = this.db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
-                        store.createIndex("by_category", "category");
-                    }
-                };
-                request.onsuccess = e => {
-                    this.db = e.target.result;
-                    this.loadDataFromDB();
-                };
-            },
-
-            saveItemToDB(categoryIndex, itemIndex) {
-                const item = this.defaultData[categoryIndex].items[itemIndex];
-                const transaction = this.db.transaction([this.storeName], "readwrite");
-                transaction.objectStore(this.storeName).put(item);
-                transaction.oncomplete = () => console.log("Item saved.");
-                transaction.onerror = e => console.error("Save error:", e.target.error);
-            },
-
-            loadDataFromDB() {
-                const request = this.db.transaction([this.storeName], "readonly").objectStore(this.storeName).getAll();
-                request.onsuccess = e => {
-                    e.target.result.forEach(item => {
-                        const category = this.defaultData.find(c => c.category === item.category);
-                        category ? category.items.push(item) : this.defaultData.push({ category: item.category, items: [item] });
-                    });
-                    this.loadTableFromHtml();
-                };
-            },
-
-            deleteItemFromDB(categoryIndex, itemIndex) {
-                const itemId = this.defaultData[categoryIndex].items[itemIndex].id;
-                const transaction = this.db.transaction([this.storeName], "readwrite");
-                transaction.objectStore(this.storeName).delete(itemId);
-                transaction.oncomplete = () => {
-                    console.log("Item deleted from DB.");
-                    this.defaultData[categoryIndex].items.splice(itemIndex, 1);
-                    this.removeRowFromDOM(categoryIndex, itemIndex);
-                };
-                transaction.onerror = e => console.error("Delete error:", e.target.error);
-            },
-
-            removeRowFromDOM(categoryIndex, itemIndex) {
-                const row = document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"]`);
-                if (row) {
-                    row.remove();
-                }
-            },
-
-            saveItem(categoryIndex, itemIndex) {
-                const item = this.defaultData[categoryIndex].items[itemIndex];
-                document.querySelectorAll(`[data-category="${categoryIndex}"][data-item="${itemIndex}"]`).forEach(cell => {
-                    const fields = ['NO', 'BARANG', 'KODE_TOKO'];
-                    item[fields[cell.cellIndex]] = cell.textContent;
-                });
-                this.saveItemToDB(categoryIndex, itemIndex);
-                document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`).style.display = 'none';
-            },
-
-            deleteItem(categoryIndex, itemIndex) {
-                this.deleteItemFromDB(categoryIndex, itemIndex);
-            },
-
-            updateDate(categoryIndex, itemIndex, dateType, value) {
-                this.defaultData[categoryIndex].items[itemIndex].TANGGAL[dateType] = value;
-                document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`).style.display = 'inline';
-            },
-
-            loadTableFromHtml() {
-                const tbody = document.querySelector("#dataTablePlastik tbody");
-                tbody.innerHTML = '';
-                this.defaultData.forEach((category, categoryIndex) => {
-                    tbody.innerHTML += `<tr class="sub-title"><td colspan="18">${category.category} <button onclick="PlastikDB.addItem(${categoryIndex})">+</button></td></tr>`;
-                    category.items.forEach((item, itemIndex) => {
-                        tbody.innerHTML += `
-                            <tr class="data-row" data-category="${categoryIndex}" data-item="${itemIndex}">
-                                ${['NO', 'BARANG', 'KODE_TOKO', 'KODE_GUDANG', 'DUS/BALL', '1 PACK', '1 PCS', '1000 GRAM', '500 GRAM', '250 GRAM', '100 GRAM', '50 GRAM', 'STOK.GUDANG', 'STOK.TOKO'].map(field => 
-                                    `<td contenteditable="true">${item.HARGA[field] || item.STOK[field] || item[field]}</td>`).join('')}
-                                ${['MASUK', 'KELUAR'].map(dateType => 
-                                    `<td><input type="date" value="${item.TANGGAL[dateType] || new Date().toISOString().split('T')[0]}" 
-                                           oninput="PlastikDB.updateDate(${categoryIndex}, ${itemIndex}, '${dateType}', this.value)"></td>`).join('')}
-                                <td><button class="save-button" onclick="PlastikDB.saveItem(${categoryIndex}, ${itemIndex})" style="display:none;">&#9729;</button></td>
-                                <td><button class="delete-button" onclick="PlastikDB.deleteItem(${categoryIndex}, ${itemIndex})">&#128465;</button></td>
-                            </tr>`;
-                        document.querySelectorAll(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] [contenteditable="true"]`)
-                            .forEach(cell => cell.addEventListener('input', () => {
-                                document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`).style.display = 'inline';
-                            }));
-                    });
-                });
-            },
-
-            addItem(categoryIndex) {
-                const newItem = {
-                    NO: this.defaultData[categoryIndex].items.length + 1, BARANG: '', KODE_TOKO: '', KODE_GUDANG: '', 
-                    HARGA: { "DUS/BALL": '', "1 PACK": '', "1 PCS": '', "1000 GRAM": '', "500 GRAM": '', "250 GRAM": '', "100 GRAM": '', "50 GRAM": '' },
-                    STOK: { GUDANG: '', TOKO: '' }, TANGGAL: { EXPAYER: '', MASUK: '', KELUAR: '' }, category: this.defaultData[categoryIndex].category
-                };
-                this.defaultData[categoryIndex].items.push(newItem);
-                this.loadTableFromHtml();
-            }
-        };
-
-        function uploadTable() {
-            const fileInput = document.createElement("input");
-            fileInput.type = "file";
-            fileInput.accept = ".json";
-
-            fileInput.onchange = (event) => {
-                const file = event.target.files[0];
-                if (!file) return;
-
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const jsonData = JSON.parse(e.target.result);
-                        if (Array.isArray(jsonData)) {
-                            PlastikDB.saveDataToDB(jsonData);
-                        } else {
-                            alert("File JSON tidak sesuai format!");
-                        }
-                    } catch (error) {
-                        alert("Terjadi kesalahan saat memuat file JSON: " + error.message);
-                    }
-                };
-                reader.readAsText(file);
-            };
-
-            fileInput.click();
-        }
-
-        window.onload = () => {
-            PlastikDB.openDB();
-        };
-
-      function downloadTable() {
+<script>
+// Fungsi untuk mengunduh data dalam format JSON
+function downloadTable() {
     const data = [];
 
     // Iterasi melalui kategori dalam defaultData
     PlastikDB.defaultData.forEach(category => {
         category.items.forEach(item => {
             const rowData = {
-                category: category.category,  // Menambahkan kategori
+                category: category.category,
                 NO: item.NO,
                 BARANG: item.BARANG,
                 KODE_TOKO: item.KODE_TOKO,
@@ -259,5 +228,59 @@
     URL.revokeObjectURL(url);
 }
 
-    </script>
-</body>
+// Fungsi untuk men-trigger pemilihan file dan memulai proses upload
+function triggerUpdateFile() {
+    const inputElement = document.createElement('input');
+    inputElement.type = 'file';
+    inputElement.accept = '.json';
+    inputElement.addEventListener('change', handleFileSelect);
+    inputElement.click(); // Simulasi klik untuk membuka dialog pemilihan file
+}
+
+// Fungsi untuk menangani pemilihan file
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (!file) {
+        console.error("Silakan pilih file JSON terlebih dahulu.");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        try {
+            const jsonData = JSON.parse(event.target.result);
+            uploadData(jsonData); // Kirim data untuk disimpan ke IndexedDB
+        } catch (error) {
+            console.error("File JSON tidak valid.");
+        }
+    };
+    reader.readAsText(file); // Membaca file yang dipilih
+}
+
+// Fungsi untuk meng-upload data ke IndexedDB
+function uploadData(jsonData) {
+    const transaction = PlastikDB.db.transaction([PlastikDB.storeName], "readwrite");
+    const store = transaction.objectStore(PlastikDB.storeName);
+
+    // Iterasi dan masukkan setiap data yang ada pada jsonData ke IndexedDB
+    jsonData.forEach(item => {
+        const request = store.put(item);
+        request.onsuccess = () => {
+            console.log("Data berhasil di-upload ke IndexedDB.");
+        };
+        request.onerror = (e) => {
+            console.error("Terjadi kesalahan saat meng-upload data:", e.target.error);
+        };
+    });
+
+    // Selesaikan transaksi
+    transaction.oncomplete = () => {
+        console.log("Semua data telah diproses.");
+    };
+    transaction.onerror = (e) => {
+        console.error("Terjadi kesalahan saat transaksi:", e.target.error);
+    };
+}
+
+PlastikDB.openDB();  // Memastikan IndexedDB terbuka saat script berjalan
+</script>
