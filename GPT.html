@@ -1,0 +1,263 @@
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="x.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <!-- Search Container -->
+    <div id="search-container">
+        <div class="search-container">
+            <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari data di tabel...">
+        </div>
+    </div>  
+
+    <!-- Main Content -->
+    <div id="mainContent">
+        <h1>PLASTIK</h1>
+        <div class="table-container" id="tablePlastik">
+            <table id="dataTablePlastik" class="table-plastik">
+                <thead>
+                    <tr>
+                        <th class="no-column" rowspan="3">NO</th>
+                        <th class="detail-barang" colspan="3">DETAIL BARANG</th>
+                        <th class="analisis-pasar" colspan="14">ANALISIS PASAR</th>
+                    </tr>
+                    <tr>
+                        <th class="jenis-barang" rowspan="2">UKURAN</th>
+                        <th class="kode" colspan="2">KODE</th>
+                        <th class="harga" colspan="8">HARGA</th>
+                        <th class="stok" colspan="2">STOK</th>
+                        <th class="tanggal" colspan="2">TANGGAL</th>
+                        <th class="aksi" colspan="2">AKSI</th> 
+                    </tr>
+                    <tr>
+                        <th class="kode-gudang">TOKO</th>
+                        <th class="kode-gudang">GUDANG</th>
+                        <th class="dus">DUS/BALL</th>
+                        <th class="pack">1 PACK</th>
+                        <th class="pcs">1 PCS</th>
+                        <th class="gram-1000">1000 GRAM</th>
+                        <th class="gram-500">500 GRAM</th>
+                        <th class="gram-250">250 GRAM</th>
+                        <th class="gram-100">100 GRAM</th>
+                        <th class="gram-50">50 GRAM</th>
+                        <th class="gudang">GUDANG</th>
+                        <th class="toko">TOKO</th>
+                        <th class="masuk">MASUK</th>
+                        <th class="keluar">KELUAR</th>
+                        <th class="save">SAVE</th> 
+                        <th class="hapus">HAPUS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>   
+    </div>
+
+    <div class="download-container">
+        <!-- Tombol Pertama -->
+        <button class="download-button" onclick="downloadTable()">
+            <i class="fas fa-download"></i>
+        </button>
+        <!-- Tombol Kedua -->
+        <button class="download-button" onclick="uploadTable()">
+            <i class="fas fa-upload"></i>
+        </button>
+    </div>
+
+    <!-- External Scripts -->
+    <script src="DW.js"></script>
+    <script src="x.js"></script>
+
+    <script>
+        const PlastikDB = {
+            dbName: "pp",
+            storeName: "x",
+            db: null,
+            defaultData: [
+                'PP Neo (0,3)', 'PP Neo (0,5)', 'PP STP (standing pouch)', 'PP Wayang', 'PP +', 'OPP',
+                'PE Tomat', 'PE Andalan', 'PE Klip', 'THINWALL', 'CUP', 'MIKA', 'PIRING', 'MANGKOK',
+                'FOAM', 'KERTAS', 'TISU', 'DUS', 'RICEBOWL', 'BUBBLE WRAP'
+            ].map(category => ({ category, items: [] })),
+
+            openDB() {
+                const request = indexedDB.open(this.dbName, 1);
+                request.onupgradeneeded = e => {
+                    this.db = e.target.result;
+                    if (!this.db.objectStoreNames.contains(this.storeName)) {
+                        const store = this.db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+                        store.createIndex("by_category", "category");
+                    }
+                };
+                request.onsuccess = e => {
+                    this.db = e.target.result;
+                    this.loadDataFromDB();
+                };
+            },
+
+            saveItemToDB(categoryIndex, itemIndex) {
+                const item = this.defaultData[categoryIndex].items[itemIndex];
+                const transaction = this.db.transaction([this.storeName], "readwrite");
+                transaction.objectStore(this.storeName).put(item);
+                transaction.oncomplete = () => console.log("Item saved.");
+                transaction.onerror = e => console.error("Save error:", e.target.error);
+            },
+
+            loadDataFromDB() {
+                const request = this.db.transaction([this.storeName], "readonly").objectStore(this.storeName).getAll();
+                request.onsuccess = e => {
+                    e.target.result.forEach(item => {
+                        const category = this.defaultData.find(c => c.category === item.category);
+                        category ? category.items.push(item) : this.defaultData.push({ category: item.category, items: [item] });
+                    });
+                    this.loadTableFromHtml();
+                };
+            },
+
+            deleteItemFromDB(categoryIndex, itemIndex) {
+                const itemId = this.defaultData[categoryIndex].items[itemIndex].id;
+                const transaction = this.db.transaction([this.storeName], "readwrite");
+                transaction.objectStore(this.storeName).delete(itemId);
+                transaction.oncomplete = () => {
+                    console.log("Item deleted from DB.");
+                    this.defaultData[categoryIndex].items.splice(itemIndex, 1);
+                    this.removeRowFromDOM(categoryIndex, itemIndex);
+                };
+                transaction.onerror = e => console.error("Delete error:", e.target.error);
+            },
+
+            removeRowFromDOM(categoryIndex, itemIndex) {
+                const row = document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"]`);
+                if (row) {
+                    row.remove();
+                }
+            },
+
+            saveItem(categoryIndex, itemIndex) {
+                const item = this.defaultData[categoryIndex].items[itemIndex];
+                document.querySelectorAll(`[data-category="${categoryIndex}"][data-item="${itemIndex}"]`).forEach(cell => {
+                    const fields = ['NO', 'BARANG', 'KODE_TOKO'];
+                    item[fields[cell.cellIndex]] = cell.textContent;
+                });
+                this.saveItemToDB(categoryIndex, itemIndex);
+                document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`).style.display = 'none';
+            },
+
+            deleteItem(categoryIndex, itemIndex) {
+                this.deleteItemFromDB(categoryIndex, itemIndex);
+            },
+
+            updateDate(categoryIndex, itemIndex, dateType, value) {
+                this.defaultData[categoryIndex].items[itemIndex].TANGGAL[dateType] = value;
+                document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`).style.display = 'inline';
+            },
+
+            loadTableFromHtml() {
+                const tbody = document.querySelector("#dataTablePlastik tbody");
+                tbody.innerHTML = '';
+                this.defaultData.forEach((category, categoryIndex) => {
+                    tbody.innerHTML += `<tr class="sub-title"><td colspan="18">${category.category} <button onclick="PlastikDB.addItem(${categoryIndex})">+</button></td></tr>`;
+                    category.items.forEach((item, itemIndex) => {
+                        tbody.innerHTML += `
+                            <tr class="data-row" data-category="${categoryIndex}" data-item="${itemIndex}">
+                                ${['NO', 'BARANG', 'KODE_TOKO', 'KODE_GUDANG', 'DUS/BALL', '1 PACK', '1 PCS', '1000 GRAM', '500 GRAM', '250 GRAM', '100 GRAM', '50 GRAM', 'STOK.GUDANG', 'STOK.TOKO'].map(field => 
+                                    `<td contenteditable="true">${item.HARGA[field] || item.STOK[field] || item[field]}</td>`).join('')}
+                                ${['MASUK', 'KELUAR'].map(dateType => 
+                                    `<td><input type="date" value="${item.TANGGAL[dateType] || new Date().toISOString().split('T')[0]}" 
+                                           oninput="PlastikDB.updateDate(${categoryIndex}, ${itemIndex}, '${dateType}', this.value)"></td>`).join('')}
+                                <td><button class="save-button" onclick="PlastikDB.saveItem(${categoryIndex}, ${itemIndex})" style="display:none;">&#9729;</button></td>
+                                <td><button class="delete-button" onclick="PlastikDB.deleteItem(${categoryIndex}, ${itemIndex})">&#128465;</button></td>
+                            </tr>`;
+                        document.querySelectorAll(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] [contenteditable="true"]`)
+                            .forEach(cell => cell.addEventListener('input', () => {
+                                document.querySelector(`[data-category="${categoryIndex}"][data-item="${itemIndex}"] .save-button`).style.display = 'inline';
+                            }));
+                    });
+                });
+            },
+
+            addItem(categoryIndex) {
+                const newItem = {
+                    NO: this.defaultData[categoryIndex].items.length + 1, BARANG: '', KODE_TOKO: '', KODE_GUDANG: '', 
+                    HARGA: { "DUS/BALL": '', "1 PACK": '', "1 PCS": '', "1000 GRAM": '', "500 GRAM": '', "250 GRAM": '', "100 GRAM": '', "50 GRAM": '' },
+                    STOK: { GUDANG: '', TOKO: '' }, TANGGAL: { EXPAYER: '', MASUK: '', KELUAR: '' }, category: this.defaultData[categoryIndex].category
+                };
+                this.defaultData[categoryIndex].items.push(newItem);
+                this.loadTableFromHtml();
+            }
+        };
+
+        function uploadTable() {
+            const fileInput = document.createElement("input");
+            fileInput.type = "file";
+            fileInput.accept = ".json";
+
+            fileInput.onchange = (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const jsonData = JSON.parse(e.target.result);
+                        if (Array.isArray(jsonData)) {
+                            PlastikDB.saveDataToDB(jsonData);
+                        } else {
+                            alert("File JSON tidak sesuai format!");
+                        }
+                    } catch (error) {
+                        alert("Terjadi kesalahan saat memuat file JSON: " + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            };
+
+            fileInput.click();
+        }
+
+        window.onload = () => {
+            PlastikDB.openDB();
+        };
+
+      function downloadTable() {
+    const data = [];
+
+    // Iterasi melalui kategori dalam defaultData
+    PlastikDB.defaultData.forEach(category => {
+        category.items.forEach(item => {
+            const rowData = {
+                category: category.category,  // Menambahkan kategori
+                NO: item.NO,
+                BARANG: item.BARANG,
+                KODE_TOKO: item.KODE_TOKO,
+                KODE_GUDANG: item.KODE_GUDANG,
+                "DUS/BALL": item.HARGA["DUS/BALL"],
+                "1 PACK": item.HARGA["1 PACK"],
+                "1 PCS": item.HARGA["1 PCS"],
+                "1000 GRAM": item.HARGA["1000 GRAM"],
+                "500 GRAM": item.HARGA["500 GRAM"],
+                "250 GRAM": item.HARGA["250 GRAM"],
+                "100 GRAM": item.HARGA["100 GRAM"],
+                "50 GRAM": item.HARGA["50 GRAM"],
+                "STOK.GUDANG": item.STOK.GUDANG,
+                "STOK.TOKO": item.STOK.TOKO,
+                MASUK: item.TANGGAL.MASUK,
+                KELUAR: item.TANGGAL.KELUAR
+            };
+            data.push(rowData);  // Menambahkan data item ke dalam array data
+        });
+    });
+
+    // Membuat elemen link sementara untuk mengunduh file JSON
+    const downloadLink = document.createElement("a");
+    const jsonBlob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json;charset=utf-8;" });
+    const url = URL.createObjectURL(jsonBlob);
+    downloadLink.setAttribute("href", url);
+    downloadLink.setAttribute("download", "tabel_plastik.json");
+    downloadLink.click();
+    URL.revokeObjectURL(url);
+}
+
+    </script>
+</body>
